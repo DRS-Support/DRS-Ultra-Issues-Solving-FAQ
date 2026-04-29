@@ -3,303 +3,369 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DRS Ultra Batch — Bug Solving FAQ</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600&display=swap" rel="stylesheet"/>
+<title>DRS Ultra — Bug Solving FAQ</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --blue: #185FA5;
-    --blue-light: #E6F1FB;
-    --blue-dark: #0C447C;
-    --green: #1D9E75;
-    --green-light: #E1F5EE;
-    --green-dark: #085041;
-    --amber: #EF9F27;
-    --amber-light: #FAEEDA;
-    --amber-dark: #633806;
-    --bg: #f4f6f9;
-    --surface: #ffffff;
-    --border: rgba(0,0,0,0.08);
-    --text: #1a1a1a;
-    --muted: #6b7280;
-    --radius: 12px;
+    --orange:       #FF6B00;
+    --orange-mid:   #FF8C00;
+    --orange-light: #FFA500;
+    --orange-pale:  #FFF3E6;
+    --orange-dark:  #CC4400;
+    --orange-deeper:#7A2800;
+    --yellow:       #FFD166;
+
+    --db-light:     #FFF3E6;
+    --db-dark:      #7A2800;
+    --db-border:    #FFB066;
+
+    --cfg-light:    #EFF6FF;
+    --cfg-dark:     #1E3A8A;
+    --cfg-border:   #93C5FD;
+
+    --plc-light:    #F0FDF4;
+    --plc-dark:     #14532D;
+    --plc-border:   #86EFAC;
+
+    --perf-light:   #F5F3FF;
+    --perf-dark:    #3B0764;
+    --perf-border:  #C4B5FD;
+
+    --bg:      #F5F5F5;
+    --surface: #FFFFFF;
+    --border:  rgba(0,0,0,0.08);
+    --text:    #1a1a1a;
+    --muted:   #6b7280;
+    --radius:  14px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    padding: 2rem 1rem;
   }
 
-  .container { max-width: 760px; margin: 0 auto; }
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #CC4400 0%, #FF6B00 40%, #FFA500 80%, #FFD166 100%);
+    position: relative; overflow: hidden;
+  }
+  .hero-pattern {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(45deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 20px);
+  }
+  .hero-c1 { position:absolute; width:400px; height:400px; border-radius:50%; background:rgba(255,255,255,0.07); top:-120px; right:-80px; }
+  .hero-c2 { position:absolute; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.05); bottom:-60px; left:40px; }
+  .hero-c3 { position:absolute; width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,0.08); top:30px; left:200px; }
 
-  /* Header */
-  .header {
-    background: var(--blue);
-    border-radius: var(--radius);
-    padding: 2rem 1.75rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .header::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 180px; height: 180px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-  }
-  .header::after {
-    content: '';
-    position: absolute;
-    bottom: -60px; right: 60px;
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.04);
-  }
-  .header-tag {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 500;
-    font-family: 'IBM Plex Mono', monospace;
-    background: rgba(255,255,255,0.15);
-    color: #B5D4F4;
-    padding: 3px 10px;
-    border-radius: 20px;
-    margin-bottom: 0.75rem;
-    letter-spacing: 0.05em;
-  }
-  .header h1 { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 6px; }
-  .header p { font-size: 13px; color: #B5D4F4; }
+  .hero-inner { position:relative; z-index:2; max-width:800px; margin:0 auto; padding:2rem 1.5rem 0; }
 
-  /* Controls */
-  .controls { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
-  .search-wrap { flex: 1; min-width: 200px; position: relative; }
-  .search-wrap input {
-    width: 100%;
-    padding: 0.6rem 0.9rem 0.6rem 2.25rem;
-    font-size: 13px;
-    font-family: 'Sora', sans-serif;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--surface);
-    color: var(--text);
-    outline: none;
+  .logo-bar {
+    display:flex; align-items:center; gap:14px;
+    padding-bottom:1.5rem; border-bottom:1px solid rgba(255,255,255,0.2); margin-bottom:2rem;
   }
-  .search-wrap input:focus { border-color: var(--blue); }
-  .search-icon {
-    position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);
-    width: 14px; height: 14px; opacity: 0.4;
+  .logo-box {
+    width:54px; height:54px; border-radius:12px; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 20px rgba(0,0,0,0.2); overflow:hidden; flex-shrink:0;
   }
+  .logo-box img { width:100%; height:100%; object-fit:contain; padding:4px; }
+  .logo-fallback { font-size:13px; font-weight:800; color:var(--orange); font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.5px; text-align:center; line-height:1.2; }
+  .logo-info { flex:1; }
+  .logo-company { font-size:16px; font-weight:800; color:#fff; letter-spacing:-0.2px; }
+  .logo-tagline { font-size:11px; color:rgba(255,255,255,0.75); margin-top:2px; font-style:italic; }
+  .version-badge { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; font-size:11px; font-weight:700; font-family:'IBM Plex Mono',monospace; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; white-space:nowrap; }
 
-  .cats { display: flex; gap: 8px; flex-wrap: wrap; }
-  .cat-btn {
-    font-size: 12px; font-weight: 500; font-family: 'Sora', sans-serif;
-    padding: 5px 14px; border-radius: 20px; border: 1.5px solid transparent;
-    cursor: pointer; transition: all 0.2s; opacity: 0.5;
-  }
-  .cat-btn.active { opacity: 1; }
-  .cat-btn.all { background: var(--blue-light); color: var(--blue-dark); border-color: #85B7EB; }
-  .cat-btn.data { background: var(--green-light); color: var(--green-dark); border-color: #5DCAA5; }
-  .cat-btn.perf { background: var(--amber-light); color: var(--amber-dark); border-color: var(--amber); }
+  .hero-live { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); color:#fff; font-size:11px; font-weight:700; font-family:'IBM Plex Mono',monospace; padding:5px 12px; border-radius:20px; margin-bottom:1rem; letter-spacing:0.06em; }
+  .live-dot { width:7px; height:7px; border-radius:50%; background:#fff; animation:blink 1.5s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* Section */
-  .section { margin-bottom: 2rem; }
-  .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
-  .sec-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .dot-data { background: var(--green); }
-  .dot-perf { background: var(--amber); }
-  .sec-title { font-size: 14px; font-weight: 600; color: var(--text); }
-  .sec-count {
-    margin-left: auto; font-size: 11px; font-family: 'IBM Plex Mono', monospace;
-    color: var(--muted); background: #f0f0f0; padding: 2px 8px; border-radius: 10px;
-  }
+  .hero h1 { font-size:34px; font-weight:800; color:#fff; letter-spacing:-1px; line-height:1.15; margin-bottom:0.5rem; text-shadow:0 2px 12px rgba(0,0,0,0.15); }
+  .hero h1 .ultra { background:rgba(255,255,255,0.18); padding:0 8px; border-radius:6px; display:inline-block; }
 
-  /* FAQ Card */
-  .faq-card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    overflow: hidden;
-  }
-  .faq-item { border-bottom: 1px solid var(--border); }
-  .faq-item:last-child { border-bottom: none; }
-  .faq-q {
-    width: 100%; background: none; border: none; text-align: left;
-    padding: 0.9rem 1.1rem; font-size: 13.5px; font-weight: 500;
-    font-family: 'Sora', sans-serif; color: var(--text);
-    cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 8px;
-    transition: background 0.15s;
-  }
-  .faq-q:hover { background: #f9fafb; }
-  .faq-a {
-    font-size: 13px; color: var(--muted); line-height: 1.8;
-    max-height: 0; overflow: hidden;
-    transition: max-height 0.35s ease, padding 0.35s ease;
-    padding: 0 1.1rem; background: #fafafa;
-    border-top: 0px solid var(--border);
-  }
-  .faq-a.open { max-height: 300px; padding: 0.85rem 1.1rem; border-top: 1px solid var(--border); }
-  .faq-a code {
-    font-family: 'IBM Plex Mono', monospace; font-size: 12px;
-    background: #eef0f3; padding: 1px 6px; border-radius: 4px; color: #374151;
-  }
-  .arrow { font-size: 10px; color: var(--muted); transition: transform 0.3s; flex-shrink: 0; }
-  .arrow.open { transform: rotate(180deg); }
-  .badge-new {
-    font-size: 10px; padding: 2px 7px; border-radius: 10px;
-    background: var(--green-light); color: var(--green-dark);
-    font-weight: 500; margin-left: 6px; vertical-align: middle;
-  }
+  .hero-sub { font-size:14px; color:rgba(255,255,255,0.85); line-height:1.65; max-width:500px; margin-bottom:1.75rem; }
 
-  /* Add button */
-  .add-btn {
-    width: 100%; margin-top: 0.6rem; padding: 0.65rem;
-    font-size: 13px; font-weight: 500; font-family: 'Sora', sans-serif;
-    background: transparent; border: 1.5px dashed rgba(0,0,0,0.15);
-    border-radius: 10px; cursor: pointer; color: var(--muted); transition: all 0.2s;
-  }
-  .add-btn:hover { background: var(--surface); color: var(--text); border-color: rgba(0,0,0,0.25); }
+  .hero-stats { display:flex; gap:0; background:rgba(0,0,0,0.12); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.15); }
+  .stat { flex:1; padding:14px 16px; text-align:center; border-right:1px solid rgba(255,255,255,0.1); }
+  .stat:last-child { border-right:none; }
+  .stat-num { font-size:22px; font-weight:800; color:#fff; font-family:'IBM Plex Mono',monospace; display:block; }
+  .stat-label { font-size:10px; color:rgba(255,255,255,0.7); margin-top:2px; display:block; font-weight:500; letter-spacing:0.04em; }
 
-  /* Modal */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.4); align-items: center; justify-content: center; z-index: 100;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface); border-radius: var(--radius);
-    border: 1px solid var(--border); padding: 1.5rem;
-    width: 92%; max-width: 480px; animation: popIn 0.2s ease;
-  }
-  @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 1.1rem; }
-  .field { margin-bottom: 1rem; }
-  .field label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 5px; letter-spacing: 0.04em; text-transform: uppercase; }
-  .field input, .field textarea, .field select {
-    width: 100%; padding: 0.6rem 0.8rem; font-size: 13px;
-    font-family: 'Sora', sans-serif; border: 1px solid var(--border);
-    border-radius: 8px; background: #fafafa; color: var(--text); outline: none;
-  }
-  .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--blue); background: #fff; }
-  .field textarea { height: 90px; resize: vertical; }
-  .modal-actions { display: flex; gap: 8px; margin-top: 1.25rem; }
-  .modal-actions button {
-    flex: 1; padding: 0.65rem; font-size: 13px; font-weight: 500;
-    font-family: 'Sora', sans-serif; border-radius: 8px; cursor: pointer; transition: all 0.2s;
-  }
-  .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--muted); }
-  .btn-cancel:hover { background: #f0f0f0; }
-  .btn-save { background: var(--blue); border: none; color: #fff; }
-  .btn-save:hover { background: var(--blue-dark); }
+  .hero-wave { display:block; width:100%; height:48px; margin-top:-1px; }
 
-  .no-result { font-size: 13px; color: var(--muted); padding: 1.5rem 0; display: none; text-align: center; }
+  /* MAIN */
+  .main { max-width:800px; margin:0 auto; padding:1.5rem 1.5rem 3rem; }
 
-  footer { text-align: center; font-size: 12px; color: var(--muted); margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .controls { display:flex; gap:10px; margin-bottom:2rem; flex-wrap:wrap; background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+  .search-wrap { flex:1; min-width:200px; position:relative; }
+  .search-wrap input { width:100%; padding:0.65rem 0.9rem 0.65rem 2.4rem; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; border:1px solid var(--border); border-radius:9px; background:var(--bg); color:var(--text); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
+  .search-wrap input:focus { border-color:var(--orange); background:#fff; box-shadow:0 0 0 3px rgba(255,107,0,0.12); }
+  .search-icon { position:absolute; left:0.8rem; top:50%; transform:translateY(-50%); width:14px; height:14px; opacity:0.35; }
+  .cats { display:flex; gap:7px; flex-wrap:wrap; align-items:center; }
+  .cat-btn { font-size:11px; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; padding:6px 13px; border-radius:8px; border:1.5px solid transparent; cursor:pointer; transition:all 0.2s; opacity:0.45; }
+  .cat-btn.active { opacity:1; }
+  .cat-btn.all  { background:#FFF3E6; color:var(--orange-deeper); border-color:var(--db-border); }
+  .cat-btn.db   { background:var(--db-light);   color:var(--db-dark);   border-color:var(--db-border); }
+  .cat-btn.cfg  { background:var(--cfg-light);  color:var(--cfg-dark);  border-color:var(--cfg-border); }
+  .cat-btn.plc  { background:var(--plc-light);  color:var(--plc-dark);  border-color:var(--plc-border); }
+  .cat-btn.perf { background:var(--perf-light); color:var(--perf-dark); border-color:var(--perf-border); }
+
+  .section { margin-bottom:2.25rem; }
+  .section-header { display:flex; align-items:center; gap:10px; margin-bottom:0.8rem; }
+  .sec-icon { width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+  .sec-title { font-size:14px; font-weight:700; color:var(--text); }
+  .sec-count { margin-left:auto; font-size:11px; font-family:'IBM Plex Mono',monospace; color:var(--muted); background:#eeeff2; padding:3px 10px; border-radius:10px; font-weight:500; }
+
+  .faq-card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.04); }
+  .faq-item { border-bottom:1px solid var(--border); }
+  .faq-item:last-child { border-bottom:none; }
+
+  .faq-q { width:100%; background:none; border:none; text-align:left; padding:1rem 1.15rem; font-size:13.5px; font-weight:500; font-family:'Plus Jakarta Sans',sans-serif; color:var(--text); cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:8px; transition:background 0.15s; }
+  .faq-q:hover { background:#fdf6f0; }
+
+  .faq-a { font-size:13px; color:var(--muted); line-height:1.85; max-height:0; overflow:hidden; transition:max-height 0.35s ease,padding 0.35s ease; padding:0 1.15rem; background:#fffaf6; border-top:0px solid var(--border); }
+  .faq-a.open { max-height:400px; padding:0.9rem 1.15rem; border-top:1px solid var(--border); }
+  .faq-a code { font-family:'IBM Plex Mono',monospace; font-size:12px; background:#ffeedd; padding:1px 6px; border-radius:4px; color:var(--orange-dark); }
+
+  .faq-item:has(.faq-a.open) .faq-q { border-left:3px solid var(--orange); padding-left:calc(1.15rem - 3px); color:var(--orange-dark); background:#fff8f3; }
+
+  .arrow { font-size:10px; color:var(--muted); transition:transform 0.3s; flex-shrink:0; }
+  .arrow.open { transform:rotate(180deg); color:var(--orange); }
+
+  .badge-new { font-size:10px; padding:2px 7px; border-radius:8px; background:var(--orange-pale); color:var(--orange-dark); font-weight:700; margin-left:6px; vertical-align:middle; }
+
+  .add-btn { width:100%; margin-top:0.65rem; padding:0.75rem; font-size:13px; font-weight:600; font-family:'Plus Jakarta Sans',sans-serif; background:transparent; border:1.5px dashed rgba(255,107,0,0.3); border-radius:10px; cursor:pointer; color:var(--orange); transition:all 0.2s; }
+  .add-btn:hover { background:var(--orange-pale); border-style:solid; border-color:var(--orange); }
+
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(100,30,0,0.45); backdrop-filter:blur(5px); align-items:center; justify-content:center; z-index:100; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:1.75rem; width:92%; max-width:480px; animation:popIn 0.2s ease; box-shadow:0 24px 64px rgba(0,0,0,0.2); }
+  @keyframes popIn { from{transform:scale(0.95) translateY(10px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+
+  .modal-head { display:flex; align-items:center; gap:12px; margin-bottom:1.25rem; }
+  .modal-icon-wrap { width:38px; height:38px; border-radius:10px; background:var(--orange-pale); display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .modal h3 { font-size:16px; font-weight:700; }
+
+  .field { margin-bottom:1rem; }
+  .field label { display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; letter-spacing:0.04em; text-transform:uppercase; }
+  .field input,.field textarea,.field select { width:100%; padding:0.65rem 0.85rem; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; border:1px solid var(--border); border-radius:8px; background:#fafafa; color:var(--text); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
+  .field input:focus,.field textarea:focus,.field select:focus { border-color:var(--orange); background:#fff; box-shadow:0 0 0 3px rgba(255,107,0,0.1); }
+  .field textarea { height:95px; resize:vertical; }
+
+  .modal-actions { display:flex; gap:8px; margin-top:1.25rem; }
+  .modal-actions button { flex:1; padding:0.7rem; font-size:13px; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; border-radius:9px; cursor:pointer; transition:all 0.2s; }
+  .btn-cancel { background:transparent; border:1px solid var(--border); color:var(--muted); }
+  .btn-cancel:hover { background:#f5f5f5; }
+  .btn-save { background:linear-gradient(135deg,var(--orange),var(--orange-light)); border:none; color:#fff; }
+  .btn-save:hover { opacity:0.9; transform:translateY(-1px); }
+
+  .no-result { font-size:13px; color:var(--muted); padding:2rem 0; display:none; text-align:center; }
+
+  footer { text-align:center; font-size:12px; color:var(--muted); margin-top:2.5rem; padding-top:1.5rem; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; }
+  .footer-dot { width:3px; height:3px; border-radius:50%; background:#ccc; }
+
+  @media(max-width:560px) {
+    .hero h1{font-size:24px}
+    .version-badge{display:none}
+    .stat-num{font-size:18px}
+  }
 </style>
 </head>
 <body>
-<div class="container">
 
-  <div class="header">
-    <div class="header-tag">v1.0 · DRS Ultra Batch</div>
-    <h1>Bug Solving FAQ</h1>
-    <p>Team reference guide · Anyone can contribute a question</p>
+<div class="hero">
+  <div class="hero-pattern"></div>
+  <div class="hero-c1"></div><div class="hero-c2"></div><div class="hero-c3"></div>
+
+  <div class="hero-inner">
+    <div class="logo-bar">
+      <div class="logo-box">
+        <img src="logo.png" alt="DRS Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+        <div class="logo-fallback" style="display:none;">DRS</div>
+      </div>
+      <div class="logo-info">
+        <div class="logo-company">Do It Right Solutions</div>
+        <div class="logo-tagline">We serve you in a better way...!</div>
+      </div>
+      <div class="version-badge">DRS ULTRA v6</div>
+    </div>
+
+    <div class="hero-live"><span class="live-dot"></span>TEAM KNOWLEDGE BASE</div>
+    <h1><span class="ultra">DRS Ultra</span> Bug Solving FAQ</h1>
+    <p class="hero-sub">Quick reference for Database, Configuration, PLC, and Performance issues in DRS Ultra Batch. Anyone on the team can contribute.</p>
+
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="total-q">16</span><span class="stat-label">Questions</span></div>
+      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Categories</span></div>
+      <div class="stat"><span class="stat-num">v6</span><span class="stat-label">DRS Ultra</span></div>
+      <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Contributions</span></div>
+    </div>
   </div>
 
+  <svg class="hero-wave" viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,24 C480,48 960,0 1440,24 L1440,48 L0,48 Z" fill="#F5F5F5"/>
+  </svg>
+</div>
+
+<div class="main">
   <div class="controls">
     <div class="search-wrap">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-      </svg>
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="text" id="search" placeholder="Search questions..." oninput="filterAll(this.value)" />
     </div>
     <div class="cats">
       <button class="cat-btn all active" onclick="filterCat('all',this)">All</button>
-      <button class="cat-btn data" onclick="filterCat('data',this)">Data errors</button>
-      <button class="cat-btn perf" onclick="filterCat('perf',this)">Performance</button>
+      <button class="cat-btn db"   onclick="filterCat('db',this)">🗄️ Database</button>
+      <button class="cat-btn cfg"  onclick="filterCat('cfg',this)">⚙️ Configuration</button>
+      <button class="cat-btn plc"  onclick="filterCat('plc',this)">🔧 PLC</button>
+      <button class="cat-btn perf" onclick="filterCat('perf',this)">⚡ Performance</button>
     </div>
   </div>
 
-  <!-- Data Processing Section -->
-  <div id="section-data" class="section">
+  <!-- Database Function -->
+  <div id="section-db" class="section">
     <div class="section-header">
-      <div class="sec-dot dot-data"></div>
-      <span class="sec-title">Data processing errors</span>
-      <span class="sec-count" id="count-data">4 questions</span>
+      <div class="sec-icon" style="background:#FFF3E6;">🗄️</div>
+      <span class="sec-title">Database Function</span>
+      <span class="sec-count" id="count-db">4 questions</span>
     </div>
-    <div class="faq-card" id="card-data">
+    <div class="faq-card" id="card-db">
       <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Batch job fails with a null pointer or missing field error <span class="arrow">▼</span></button>
-        <div class="faq-a">Usually caused by missing or malformed input records. Check the input file for empty required fields before the batch runs. Add a pre-validation step that flags nulls early rather than letting the job crash mid-run.</div>
+        <button class="faq-q" onclick="toggle(this)">Database connection fails on batch startup <span class="arrow">▼</span></button>
+        <div class="faq-a">Check the DB connection string in the config file — verify host, port, username, and password. Ensure the database service is running and the server can reach it on the network. Also confirm the <code>db_timeout</code> value is not too low for your environment.</div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Records processed but output data looks wrong or corrupted <span class="arrow">▼</span></button>
-        <div class="faq-a">Often a data type mismatch — a string parsed as a number. Verify field mappings in the batch config and check if any upstream system changed its format. Enable verbose logging to trace the exact step where values diverge.</div>
+        <button class="faq-q" onclick="toggle(this)">Stored procedure returns unexpected null values <span class="arrow">▼</span></button>
+        <div class="faq-a">Null returns usually mean the input parameters passed to the procedure don't match any records. Log the parameters being sent before the call and verify against actual table data. Check if a schema change has altered column names or types.</div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Duplicate records appearing in the output <span class="arrow">▼</span></button>
-        <div class="faq-a">Duplicates happen when a batch retries after a partial failure without clearing previously written records. Use <code>batch_id</code> tracking to prevent reprocessing already-committed records.</div>
+        <button class="faq-q" onclick="toggle(this)">Batch writes failing with a foreign key constraint error <span class="arrow">▼</span></button>
+        <div class="faq-a">The batch is trying to insert a record that references a parent row that doesn't exist yet. Ensure parent tables are populated before child tables in the processing order. Review the sequence of inserts in your batch logic.</div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Batch completes but some records are silently skipped <span class="arrow">▼</span></button>
-        <div class="faq-a">Silent skips happen when error handling swallows exceptions without logging. Ensure skipped records are written to a dead-letter log. Cross-check input vs output record count after every run.</div>
+        <button class="faq-q" onclick="toggle(this)">Database deadlock detected during concurrent batch runs <span class="arrow">▼</span></button>
+        <div class="faq-a">Deadlocks occur when two processes lock the same rows in opposite order. Add retry logic with exponential backoff. Check if multiple batch instances are writing to the same table — consider serializing those jobs or using row-level locking hints.</div>
       </div>
     </div>
-    <button class="add-btn" onclick="openModal('data')">+ Add a question to this category</button>
+    <button class="add-btn" onclick="openModal('db')">+ Add a question to Database Function</button>
   </div>
 
-  <!-- Performance Section -->
+  <!-- Configuration Function -->
+  <div id="section-cfg" class="section">
+    <div class="section-header">
+      <div class="sec-icon" style="background:#EFF6FF;">⚙️</div>
+      <span class="sec-title">Configuration Function</span>
+      <span class="sec-count" id="count-cfg">4 questions</span>
+    </div>
+    <div class="faq-card" id="card-cfg">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Batch not picking up updated config values after restart <span class="arrow">▼</span></button>
+        <div class="faq-a">DRS Ultra caches config on load. After editing a config file, ensure you do a full service restart and not just a reload. Also check that the correct config file path is referenced — multiple config files in different folders can cause confusion.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Environment-specific settings not applying in production <span class="arrow">▼</span></button>
+        <div class="faq-a">Confirm the <code>ENV</code> variable is set to <code>production</code> on the server. DRS Ultra uses environment flags to load the correct config overlay. If the flag is missing, it defaults to the base config which may have dev values.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Batch schedule not triggering at the configured time <span class="arrow">▼</span></button>
+        <div class="faq-a">Check the cron expression in the scheduler config for syntax errors. Verify the server timezone matches the expected trigger timezone. Also confirm the scheduler service itself is running — it can stop silently after a system reboot.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Config file changes get overwritten after deployment <span class="arrow">▼</span></button>
+        <div class="faq-a">Deployment pipelines often replace config files with defaults. Move environment-specific config to a location outside the deployment directory, or use a secrets manager. Reference that external path in the application config so it survives deployments.</div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="openModal('cfg')">+ Add a question to Configuration Function</button>
+  </div>
+
+  <!-- PLC Functions -->
+  <div id="section-plc" class="section">
+    <div class="section-header">
+      <div class="sec-icon" style="background:#F0FDF4;">🔧</div>
+      <span class="sec-title">PLC Functions</span>
+      <span class="sec-count" id="count-plc">4 questions</span>
+    </div>
+    <div class="faq-card" id="card-plc">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">PLC communication drops intermittently during batch run <span class="arrow">▼</span></button>
+        <div class="faq-a">Intermittent drops usually point to network instability or PLC scan cycle overload. Check the PLC CPU utilization during the batch window. Reduce polling frequency in the DRS config and add a reconnect handler so the batch resumes instead of failing on a drop.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">PLC tag values reading as zero even though machine is running <span class="arrow">▼</span></button>
+        <div class="faq-a">Zero reads often mean the tag address is wrong or the data block has shifted after a PLC program update. Verify the tag addresses in the DRS tag mapping config against the latest PLC program. A PLC upload after a program change is essential.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Batch writes to PLC not reflecting on the machine <span class="arrow">▼</span></button>
+        <div class="faq-a">Check if the PLC is in RUN mode and accepting writes. Some PLC models require write-enable to be set explicitly. Also verify that the DRS batch has write permission on that specific data block — read-only configurations are a common oversight.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">PLC timestamp mismatch causing data sync issues <span class="arrow">▼</span></button>
+        <div class="faq-a">Ensure the PLC clock is synced with the server via NTP. Even a few seconds of drift can cause out-of-order records in time-sensitive batch processing. Set a maximum acceptable clock skew in the DRS config and alert when it is exceeded.</div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="openModal('plc')">+ Add a question to PLC Functions</button>
+  </div>
+
+  <!-- Performance Enhancement -->
   <div id="section-perf" class="section">
     <div class="section-header">
-      <div class="sec-dot dot-perf"></div>
-      <span class="sec-title">Performance / timeout issues</span>
+      <div class="sec-icon" style="background:#F5F3FF;">⚡</div>
+      <span class="sec-title">Performance Enhancement</span>
       <span class="sec-count" id="count-perf">4 questions</span>
     </div>
     <div class="faq-card" id="card-perf">
       <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Batch job times OUT OUT before completing <span class="arrow">▼</span></button>
-        <div class="faq-a">Check if the timeout threshold matches the expected data volume. Look for missing database indexes on columns used in batch queries. Consider splitting large batches into smaller chunks using a configurable <code>chunk_size</code> parameter.</div>
+        <button class="faq-q" onclick="toggle(this)">Batch job takes too long to complete with large datasets <span class="arrow">▼</span></button>
+        <div class="faq-a">Break the dataset into smaller chunks using the <code>chunk_size</code> parameter. Enable parallel processing where the data allows. Add database indexes on the columns used in batch queries — missing indexes are the most common cause of slow bulk operations.</div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Job runs much slower than usual with the same data size <span class="arrow">▼</span></button>
-        <div class="faq-a">A sudden slowdown usually means resource contention — check if another heavy process is running simultaneously. Also check memory usage; if garbage collection is frequent, heap size may need to be increased.</div>
+        <button class="faq-q" onclick="toggle(this)">Memory usage climbs continuously and never drops <span class="arrow">▼</span></button>
+        <div class="faq-a">A steady memory climb usually means objects are being accumulated in a cache or collection without being cleared. Review loops that build lists across iterations. Implement a flush or clear step at the end of each chunk to release memory back to the system.</div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Batch hangs indefinitely and never finishes or fails <span class="arrow">▼</span></button>
-        <div class="faq-a">A hang is often a deadlock on a database lock or an infinite retry loop. Check active DB sessions for blocked queries. Add a max-retry limit and a job-level timeout watchdog so the process alerts the team rather than hanging silently.</div>
+        <button class="faq-q" onclick="toggle(this)">CPU spikes to 100% during batch execution <span class="arrow">▼</span></button>
+        <div class="faq-a">Identify the processing step causing the spike using task manager or a profiler. Common causes are unoptimized string operations, nested loops, or too many simultaneous threads. Throttle thread count in the DRS config to match the server's core count.</div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Memory usage spikes and the process crashes mid-batch <span class="arrow">▼</span></button>
-        <div class="faq-a">Avoid loading the entire dataset into memory at once. Switch to a streaming or cursor-based approach that reads records in pages. Review in-memory caches that accumulate data across iterations without being cleared.</div>
+        <button class="faq-q" onclick="toggle(this)">Batch runs fine in testing but is slow in production <span class="arrow">▼</span></button>
+        <div class="faq-a">Production environments typically handle much larger data volumes and shared server load. Compare the <code>chunk_size</code>, thread count, and DB connection pool settings between environments. Also check if antivirus or monitoring agents are scanning batch output files in real time.</div>
       </div>
     </div>
-    <button class="add-btn" onclick="openModal('perf')">+ Add a question to this category</button>
+    <button class="add-btn" onclick="openModal('perf')">+ Add a question to Performance Enhancement</button>
   </div>
 
   <p class="no-result" id="no-result">No matching questions found.</p>
 
-  <footer>DRS Ultra Batch · Bug Solving FAQ · Maintained by the team</footer>
+  <footer>
+    <span>Do It Right Solutions</span><span class="footer-dot"></span>
+    <span>DRS Ultra v6</span><span class="footer-dot"></span>
+    <span>Bug Solving FAQ</span><span class="footer-dot"></span>
+    <span>Maintained by the team</span>
+  </footer>
 </div>
 
 <!-- Modal -->
 <div class="modal-overlay" id="modal" onclick="overlayClick(event)">
   <div class="modal">
-    <h3>Add a new question</h3>
+    <div class="modal-head">
+      <div class="modal-icon-wrap">➕</div>
+      <h3>Add a new question</h3>
+    </div>
     <div class="field">
       <label>Category</label>
       <select id="modal-cat">
-        <option value="data">Data processing errors</option>
-        <option value="perf">Performance / timeout issues</option>
+        <option value="db">Database Function</option>
+        <option value="cfg">Configuration Function</option>
+        <option value="plc">PLC Functions</option>
+        <option value="perf">Performance Enhancement</option>
       </select>
     </div>
     <div class="field">
       <label>Question</label>
-      <input type="text" id="modal-q" placeholder="e.g. Why does the batch skip weekends?" />
+      <input type="text" id="modal-q" placeholder="e.g. Why does the batch skip certain records?" />
     </div>
     <div class="field">
       <label>Answer</label>
@@ -313,6 +379,8 @@
 </div>
 
 <script>
+const CATS = ['db','cfg','plc','perf'];
+
 function toggle(btn) {
   const a = btn.nextElementSibling, ar = btn.querySelector('.arrow');
   const open = a.classList.contains('open');
@@ -327,9 +395,7 @@ function openModal(cat) {
   document.getElementById('modal-a').value = '';
   document.getElementById('modal').classList.add('open');
 }
-
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
-
 function overlayClick(e) { if (e.target === document.getElementById('modal')) closeModal(); }
 
 function addQuestion() {
@@ -347,27 +413,28 @@ function addQuestion() {
 }
 
 function updateCounts() {
-  ['data', 'perf'].forEach(cat => {
+  let total = 0;
+  CATS.forEach(cat => {
     const n = document.querySelectorAll('#card-' + cat + ' .faq-item').length;
     document.getElementById('count-' + cat).textContent = n + ' question' + (n !== 1 ? 's' : '');
+    total += n;
   });
+  document.getElementById('total-q').textContent = total;
 }
 
-let currentCat = 'all';
 function filterCat(cat, btn) {
-  currentCat = cat;
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('section-data').style.display = (cat === 'all' || cat === 'data') ? '' : 'none';
-  document.getElementById('section-perf').style.display = (cat === 'all' || cat === 'perf') ? '' : 'none';
+  CATS.forEach(c => {
+    document.getElementById('section-' + c).style.display = (cat === 'all' || cat === c) ? '' : 'none';
+  });
 }
 
 function filterAll(val) {
   const q = val.toLowerCase();
   let any = false;
   document.querySelectorAll('.faq-item').forEach(item => {
-    const btn = item.querySelector('.faq-q');
-    const txt = btn.textContent.toLowerCase();
+    const txt = item.querySelector('.faq-q').textContent.toLowerCase();
     const match = txt.includes(q);
     item.style.display = match ? '' : 'none';
     if (match) any = true;
