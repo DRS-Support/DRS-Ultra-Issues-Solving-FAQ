@@ -4,100 +4,168 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>DRS Ultra — Bug Solving FAQ</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --orange:       #FF6B00;
-    --orange-mid:   #FF8C00;
-    --orange-light: #FFA500;
-    --orange-pale:  #FFF3E6;
-    --orange-dark:  #CC4400;
-    --orange-deeper:#7A2800;
-    --yellow:       #FFD166;
-
-    --db-light:     #FFF3E6;
-    --db-dark:      #7A2800;
-    --db-border:    #FFB066;
-
-    --cfg-light:    #EFF6FF;
-    --cfg-dark:     #1E3A8A;
-    --cfg-border:   #93C5FD;
-
-    --plc-light:    #F0FDF4;
-    --plc-dark:     #14532D;
-    --plc-border:   #86EFAC;
-
-    --perf-light:   #F5F3FF;
-    --perf-dark:    #3B0764;
-    --perf-border:  #C4B5FD;
-
-    --bg:      #F5F5F5;
-    --surface: #FFFFFF;
-    --border:  rgba(0,0,0,0.08);
-    --text:    #1a1a1a;
-    --muted:   #6b7280;
-    --radius:  14px;
+    --orange:#FF6B00; --orange-mid:#FF8C00; --orange-light:#FFA500;
+    --orange-pale:#FFF3E6; --orange-dark:#CC4400; --orange-deeper:#7A2800;
+    --db-light:#FFF3E6; --db-dark:#7A2800; --db-border:#FFB066;
+    --cfg-light:#EFF6FF; --cfg-dark:#1E3A8A; --cfg-border:#93C5FD;
+    --plc-light:#F0FDF4; --plc-dark:#14532D; --plc-border:#86EFAC;
+    --perf-light:#F5F3FF; --perf-dark:#3B0764; --perf-border:#C4B5FD;
+    --bg:#F5F5F5; --surface:#fff; --border:rgba(0,0,0,0.08);
+    --text:#1a1a1a; --muted:#6b7280; --radius:14px;
   }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
-
-  /* HERO */
+  /* ── HERO ── */
   .hero {
-    background: linear-gradient(135deg, #CC4400 0%, #FF6B00 40%, #FFA500 80%, #FFD166 100%);
-    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #7A1A00 0%, #CC3300 20%, #FF6B00 50%, #FF9500 75%, #FFB800 100%);
+    position:relative; overflow:hidden;
   }
   .hero-pattern {
-    position: absolute; inset: 0;
-    background-image: repeating-linear-gradient(45deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 20px);
+    position:absolute; inset:0;
+    background-image: repeating-linear-gradient(45deg,rgba(255,255,255,0.025) 0px,rgba(255,255,255,0.025) 1px,transparent 1px,transparent 24px);
   }
-  .hero-c1 { position:absolute; width:400px; height:400px; border-radius:50%; background:rgba(255,255,255,0.07); top:-120px; right:-80px; }
-  .hero-c2 { position:absolute; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.05); bottom:-60px; left:40px; }
-  .hero-c3 { position:absolute; width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,0.08); top:30px; left:200px; }
+  .hero-c1 { position:absolute; width:600px; height:600px; border-radius:50%; background:rgba(255,255,255,0.05); top:-200px; right:-150px; }
+  .hero-c2 { position:absolute; width:300px; height:300px; border-radius:50%; background:rgba(0,0,0,0.08); bottom:-100px; left:80px; }
+  .hero-c3 { position:absolute; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,0.06); top:60px; left:260px; }
+  .hero-inner { position:relative; z-index:2; max-width:900px; margin:0 auto; padding:0 2rem; }
 
-  .hero-inner { position:relative; z-index:2; max-width:800px; margin:0 auto; padding:2rem 1.5rem 0; }
-
+  /* ── LOGO BAR ── */
   .logo-bar {
-    display:flex; align-items:center; gap:14px;
-    padding-bottom:1.5rem; border-bottom:1px solid rgba(255,255,255,0.2); margin-bottom:2rem;
+    display:flex; align-items:center; gap:22px;
+    padding: 22px 0 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    background: rgba(0,0,0,0.2);
+    margin: 0 -2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
-  .logo-box {
-    width:54px; height:54px; border-radius:12px; background:#fff;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 4px 20px rgba(0,0,0,0.2); overflow:hidden; flex-shrink:0;
-  }
-  .logo-box img { width:100%; height:100%; object-fit:contain; padding:4px; }
-  .logo-fallback { font-size:13px; font-weight:800; color:var(--orange); font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.5px; text-align:center; line-height:1.2; }
-  .logo-info { flex:1; }
-  .logo-company { font-size:16px; font-weight:800; color:#fff; letter-spacing:-0.2px; }
-  .logo-tagline { font-size:11px; color:rgba(255,255,255,0.75); margin-top:2px; font-style:italic; }
-  .version-badge { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; font-size:11px; font-weight:700; font-family:'IBM Plex Mono',monospace; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; white-space:nowrap; }
 
-  .hero-live { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); color:#fff; font-size:11px; font-weight:700; font-family:'IBM Plex Mono',monospace; padding:5px 12px; border-radius:20px; margin-bottom:1rem; letter-spacing:0.06em; }
+  .logo-icon {
+    width:80px; height:80px; background:#fff; border-radius:18px;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 0 3px rgba(255,255,255,0.25);
+    flex-shrink:0; overflow:hidden; padding:7px;
+  }
+  .logo-icon img { width:100%; height:100%; object-fit:contain; }
+  .logo-pyramid-svg { display:none; width:66px; height:66px; }
+
+  /* Company name area */
+  .logo-text { flex:1; }
+
+  .company-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+
+  .company-slogan {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    margin-top: 5px;
+    letter-spacing: 0.03em;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+  }
+
+  .company-tags { display:flex; gap:8px; margin-top:10px; }
+  .ctag {
+    font-size:9px; font-weight:700; letter-spacing:0.1em;
+    background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22);
+    color:rgba(255,255,255,0.9); padding:3px 10px; border-radius:20px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+
+  /* Version badge */
+  .version-badge {
+    flex-shrink:0; text-align:center;
+    background: rgba(0,0,0,0.28);
+    border: 2px solid rgba(255,255,255,0.35);
+    border-radius:16px; padding:12px 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .version-label {
+    font-family:'Orbitron',sans-serif;
+    font-size:9px; font-weight:700;
+    color:rgba(255,255,255,0.65); letter-spacing:0.15em;
+    margin-bottom:4px;
+  }
+  .version-number {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:52px; line-height:1;
+    color:#fff;
+    letter-spacing:2px;
+    text-shadow: 0 0 30px rgba(255,200,100,0.6), 0 4px 16px rgba(0,0,0,0.4);
+  }
+  .version-product {
+    font-family:'Orbitron',sans-serif;
+    font-size:10px; font-weight:900;
+    color:rgba(255,220,150,0.95); letter-spacing:0.18em;
+    margin-top:4px;
+    text-shadow: 0 0 12px rgba(255,180,50,0.5);
+  }
+
+  /* ── HERO CONTENT ── */
+  .hero-content { padding:2rem 0 0; }
+
+  .hero-live {
+    display:inline-flex; align-items:center; gap:7px;
+    background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22);
+    color:#fff; font-size:11px; font-weight:700;
+    font-family:'IBM Plex Mono',monospace;
+    padding:5px 14px; border-radius:20px; margin-bottom:1.1rem; letter-spacing:0.06em;
+  }
   .live-dot { width:7px; height:7px; border-radius:50%; background:#fff; animation:blink 1.5s infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  .hero h1 { font-size:34px; font-weight:800; color:#fff; letter-spacing:-1px; line-height:1.15; margin-bottom:0.5rem; text-shadow:0 2px 12px rgba(0,0,0,0.15); }
-  .hero h1 .ultra { background:rgba(255,255,255,0.18); padding:0 8px; border-radius:6px; display:inline-block; }
+  .hero h1 {
+    font-size:36px; font-weight:800; color:#fff;
+    letter-spacing:-0.5px; line-height:1.15; margin-bottom:0.6rem;
+    text-shadow:0 2px 14px rgba(0,0,0,0.2);
+    font-family:'Plus Jakarta Sans',sans-serif;
+  }
+  .hero h1 .tag {
+    font-family:'Orbitron',sans-serif;
+    font-size:28px; font-weight:900;
+    background:rgba(255,255,255,0.15); padding:4px 14px;
+    border-radius:8px; display:inline-block;
+    letter-spacing:0.05em;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .hero-sub { font-size:14px; color:rgba(255,255,255,0.88); line-height:1.7; max-width:520px; margin-bottom:1.75rem; }
 
-  .hero-sub { font-size:14px; color:rgba(255,255,255,0.85); line-height:1.65; max-width:500px; margin-bottom:1.75rem; }
-
-  .hero-stats { display:flex; gap:0; background:rgba(0,0,0,0.12); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.15); }
-  .stat { flex:1; padding:14px 16px; text-align:center; border-right:1px solid rgba(255,255,255,0.1); }
+  .hero-stats {
+    display:flex; background:rgba(0,0,0,0.18); border-radius:12px;
+    overflow:hidden; border:1px solid rgba(255,255,255,0.13);
+  }
+  .stat { flex:1; padding:14px 10px; text-align:center; border-right:1px solid rgba(255,255,255,0.1); }
   .stat:last-child { border-right:none; }
-  .stat-num { font-size:22px; font-weight:800; color:#fff; font-family:'IBM Plex Mono',monospace; display:block; }
-  .stat-label { font-size:10px; color:rgba(255,255,255,0.7); margin-top:2px; display:block; font-weight:500; letter-spacing:0.04em; }
+  .stat-num { font-size:22px; font-weight:800; color:#fff; font-family:'Bebas Neue',monospace; display:block; letter-spacing:1px; }
+  .stat-label { font-size:9px; color:rgba(255,255,255,0.65); margin-top:2px; display:block; font-weight:700; letter-spacing:0.1em; font-family:'IBM Plex Mono',monospace; }
 
   .hero-wave { display:block; width:100%; height:48px; margin-top:-1px; }
 
-  /* MAIN */
-  .main { max-width:800px; margin:0 auto; padding:1.5rem 1.5rem 3rem; }
+  /* ── MAIN ── */
+  .main { max-width:900px; margin:0 auto; padding:1.5rem 2rem 3rem; }
+
+  .toast { position:fixed; bottom:24px; right:24px; background:#1a1a1a; color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:500; z-index:999; opacity:0; transform:translateY(10px); transition:all 0.3s; pointer-events:none; max-width:300px; }
+  .toast.show { opacity:1; transform:translateY(0); }
+  .toast.success { border-left:4px solid #22c55e; }
+  .toast.error   { border-left:4px solid #ef4444; }
+
+  .loading-bar { width:100%; height:3px; background:var(--orange-pale); border-radius:3px; margin-bottom:1.5rem; overflow:hidden; display:none; }
+  .loading-bar.active { display:block; }
+  .loading-bar::after { content:''; display:block; height:100%; width:40%; background:var(--orange); border-radius:3px; animation:slide 1s infinite; }
+  @keyframes slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
 
   .controls { display:flex; gap:10px; margin-bottom:2rem; flex-wrap:wrap; background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
   .search-wrap { flex:1; min-width:200px; position:relative; }
@@ -125,52 +193,62 @@
 
   .faq-q { width:100%; background:none; border:none; text-align:left; padding:1rem 1.15rem; font-size:13.5px; font-weight:500; font-family:'Plus Jakarta Sans',sans-serif; color:var(--text); cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:8px; transition:background 0.15s; }
   .faq-q:hover { background:#fdf6f0; }
+  .faq-q-text { flex:1; }
+  .q-meta { font-size:10px; color:#bbb; font-family:'IBM Plex Mono',monospace; white-space:nowrap; }
 
-  .faq-a { font-size:13px; color:var(--muted); line-height:1.85; max-height:0; overflow:hidden; transition:max-height 0.35s ease,padding 0.35s ease; padding:0 1.15rem; background:#fffaf6; border-top:0px solid var(--border); }
-  .faq-a.open { max-height:400px; padding:0.9rem 1.15rem; border-top:1px solid var(--border); }
+  .faq-a { font-size:13px; color:var(--muted); line-height:1.85; max-height:0; overflow:hidden; transition:max-height 0.35s ease,padding 0.35s ease; padding:0 1.15rem; background:#fffaf6; }
+  .faq-a.open { max-height:500px; padding:0.9rem 1.15rem; border-top:1px solid var(--border); }
   .faq-a code { font-family:'IBM Plex Mono',monospace; font-size:12px; background:#ffeedd; padding:1px 6px; border-radius:4px; color:var(--orange-dark); }
-
   .faq-item:has(.faq-a.open) .faq-q { border-left:3px solid var(--orange); padding-left:calc(1.15rem - 3px); color:var(--orange-dark); background:#fff8f3; }
 
   .arrow { font-size:10px; color:var(--muted); transition:transform 0.3s; flex-shrink:0; }
   .arrow.open { transform:rotate(180deg); color:var(--orange); }
 
-  .badge-new { font-size:10px; padding:2px 7px; border-radius:8px; background:var(--orange-pale); color:var(--orange-dark); font-weight:700; margin-left:6px; vertical-align:middle; }
+  .faq-actions { display:flex; gap:6px; margin-top:10px; padding-top:10px; border-top:1px dashed #f0e0d0; }
+  .btn-edit   { font-size:11px; color:var(--orange-dark); background:var(--orange-pale); border:1px solid var(--db-border); border-radius:6px; padding:4px 12px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; font-weight:600; transition:all 0.2s; }
+  .btn-edit:hover { background:#ffe5cc; }
+  .btn-delete { font-size:11px; color:#dc2626; background:#fef2f2; border:1px solid #fecaca; border-radius:6px; padding:4px 12px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; font-weight:600; transition:all 0.2s; }
+  .btn-delete:hover { background:#fee2e2; }
 
   .add-btn { width:100%; margin-top:0.65rem; padding:0.75rem; font-size:13px; font-weight:600; font-family:'Plus Jakarta Sans',sans-serif; background:transparent; border:1.5px dashed rgba(255,107,0,0.3); border-radius:10px; cursor:pointer; color:var(--orange); transition:all 0.2s; }
   .add-btn:hover { background:var(--orange-pale); border-style:solid; border-color:var(--orange); }
 
-  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(100,30,0,0.45); backdrop-filter:blur(5px); align-items:center; justify-content:center; z-index:100; }
+  .skeleton { background:#f0f0f0; height:52px; margin-bottom:1px; animation:shimmer 1.5s infinite; }
+  @keyframes shimmer { 0%{background:#f0f0f0} 50%{background:#e8e8e8} 100%{background:#f0f0f0} }
+  .empty-cat { font-size:13px; color:#bbb; padding:1.5rem; text-align:center; font-style:italic; }
+
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(80,20,0,0.5); backdrop-filter:blur(6px); align-items:center; justify-content:center; z-index:100; }
   .modal-overlay.open { display:flex; }
-  .modal { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:1.75rem; width:92%; max-width:480px; animation:popIn 0.2s ease; box-shadow:0 24px 64px rgba(0,0,0,0.2); }
+  .modal { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:1.75rem; width:92%; max-width:500px; animation:popIn 0.2s ease; box-shadow:0 24px 64px rgba(0,0,0,0.2); }
   @keyframes popIn { from{transform:scale(0.95) translateY(10px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
 
   .modal-head { display:flex; align-items:center; gap:12px; margin-bottom:1.25rem; }
   .modal-icon-wrap { width:38px; height:38px; border-radius:10px; background:var(--orange-pale); display:flex; align-items:center; justify-content:center; font-size:18px; }
   .modal h3 { font-size:16px; font-weight:700; }
-
   .field { margin-bottom:1rem; }
   .field label { display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; letter-spacing:0.04em; text-transform:uppercase; }
   .field input,.field textarea,.field select { width:100%; padding:0.65rem 0.85rem; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; border:1px solid var(--border); border-radius:8px; background:#fafafa; color:var(--text); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
   .field input:focus,.field textarea:focus,.field select:focus { border-color:var(--orange); background:#fff; box-shadow:0 0 0 3px rgba(255,107,0,0.1); }
-  .field textarea { height:95px; resize:vertical; }
-
+  .field textarea { height:100px; resize:vertical; }
   .modal-actions { display:flex; gap:8px; margin-top:1.25rem; }
   .modal-actions button { flex:1; padding:0.7rem; font-size:13px; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; border-radius:9px; cursor:pointer; transition:all 0.2s; }
   .btn-cancel { background:transparent; border:1px solid var(--border); color:var(--muted); }
   .btn-cancel:hover { background:#f5f5f5; }
   .btn-save { background:linear-gradient(135deg,var(--orange),var(--orange-light)); border:none; color:#fff; }
-  .btn-save:hover { opacity:0.9; transform:translateY(-1px); }
+  .btn-save:hover { opacity:0.9; }
+  .btn-save:disabled { opacity:0.6; cursor:not-allowed; }
 
   .no-result { font-size:13px; color:var(--muted); padding:2rem 0; display:none; text-align:center; }
-
   footer { text-align:center; font-size:12px; color:var(--muted); margin-top:2.5rem; padding-top:1.5rem; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; }
   .footer-dot { width:3px; height:3px; border-radius:50%; background:#ccc; }
 
-  @media(max-width:560px) {
+  @media(max-width:600px) {
     .hero h1{font-size:24px}
-    .version-badge{display:none}
-    .stat-num{font-size:18px}
+    .hero h1 .tag{font-size:20px}
+    .version-number{font-size:38px}
+    .company-name{font-size:16px}
+    .logo-icon{width:60px;height:60px}
+    .company-tags{display:none}
   }
 </style>
 </head>
@@ -181,27 +259,51 @@
   <div class="hero-c1"></div><div class="hero-c2"></div><div class="hero-c3"></div>
 
   <div class="hero-inner">
+
+    <!-- ── LOGO BAR ── -->
     <div class="logo-bar">
-      <div class="logo-box">
-        <img src="logo.png" alt="DRS Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-        <div class="logo-fallback" style="display:none;">DRS</div>
+      <div class="logo-icon">
+        <img src="logo.png" alt="DRS Logo"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <svg class="logo-pyramid-svg" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="30,3 57,52 3,52" fill="#FF6B00"/>
+          <polygon points="30,14 50,47 10,47" fill="#CC3300"/>
+          <ellipse cx="30" cy="46" rx="9" ry="5" fill="rgba(0,0,0,0.18)"/>
+          <circle cx="30" cy="43" r="7" fill="white"/>
+          <circle cx="30" cy="43" r="4.5" fill="#FF6B00"/>
+          <circle cx="30" cy="43" r="2" fill="#CC3300"/>
+        </svg>
       </div>
-      <div class="logo-info">
-        <div class="logo-company">Do It Right Solutions</div>
-        <div class="logo-tagline">We serve you in a better way...!</div>
+
+      <div class="logo-text">
+        <div class="company-name">DO IT RIGHT SOLUTIONS</div>
+        <div class="company-slogan">"We serve you in a better way...!"</div>
+        <div class="company-tags">
+          <span class="ctag">AUTOMATION</span>
+          <span class="ctag">MANUFACTURING</span>
+          <span class="ctag">BATCH PROCESSING</span>
+        </div>
       </div>
-      <div class="version-badge">DRS ULTRA v6</div>
+
+      <div class="version-badge">
+        <div class="version-label">VERSION</div>
+        <div class="version-number">6</div>
+        <div class="version-product">DRS ULTRA</div>
+      </div>
     </div>
 
-    <div class="hero-live"><span class="live-dot"></span>TEAM KNOWLEDGE BASE</div>
-    <h1><span class="ultra">DRS Ultra</span> Bug Solving FAQ</h1>
-    <p class="hero-sub">Quick reference for Database, Configuration, PLC, and Performance issues in DRS Ultra Batch. Anyone on the team can contribute.</p>
+    <!-- ── HERO CONTENT ── -->
+    <div class="hero-content">
+      <div class="hero-live"><span class="live-dot"></span>LIVE · TEAM KNOWLEDGE BASE</div>
+      <h1><span class="tag">DRS Ultra</span> Bug Solving FAQ</h1>
+      <p class="hero-sub">Quick reference for Database, Configuration, PLC, and Performance issues in DRS Ultra. Anyone on the team can contribute — all questions are saved permanently in the cloud.</p>
 
-    <div class="hero-stats">
-      <div class="stat"><span class="stat-num" id="total-q">16</span><span class="stat-label">Questions</span></div>
-      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Categories</span></div>
-      <div class="stat"><span class="stat-num">v6</span><span class="stat-label">DRS Ultra</span></div>
-      <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Contributions</span></div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" id="total-q">—</span><span class="stat-label">QUESTIONS</span></div>
+        <div class="stat"><span class="stat-num">4</span><span class="stat-label">CATEGORIES</span></div>
+        <div class="stat"><span class="stat-num">V6</span><span class="stat-label">DRS ULTRA</span></div>
+        <div class="stat"><span class="stat-num">☁</span><span class="stat-label">CLOUD SAVED</span></div>
+      </div>
     </div>
   </div>
 
@@ -210,7 +312,10 @@
   </svg>
 </div>
 
+<!-- ── MAIN ── -->
 <div class="main">
+  <div class="loading-bar" id="loading-bar"></div>
+
   <div class="controls">
     <div class="search-wrap">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -225,116 +330,48 @@
     </div>
   </div>
 
-  <!-- Database Function -->
+  <!-- Database -->
   <div id="section-db" class="section">
     <div class="section-header">
       <div class="sec-icon" style="background:#FFF3E6;">🗄️</div>
       <span class="sec-title">Database Function</span>
-      <span class="sec-count" id="count-db">4 questions</span>
+      <span class="sec-count" id="count-db">loading...</span>
     </div>
-    <div class="faq-card" id="card-db">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Database connection fails on batch startup <span class="arrow">▼</span></button>
-        <div class="faq-a">Check the DB connection string in the config file — verify host, port, username, and password. Ensure the database service is running and the server can reach it on the network. Also confirm the <code>db_timeout</code> value is not too low for your environment.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Stored procedure returns unexpected null values <span class="arrow">▼</span></button>
-        <div class="faq-a">Null returns usually mean the input parameters passed to the procedure don't match any records. Log the parameters being sent before the call and verify against actual table data. Check if a schema change has altered column names or types.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Batch writes failing with a foreign key constraint error <span class="arrow">▼</span></button>
-        <div class="faq-a">The batch is trying to insert a record that references a parent row that doesn't exist yet. Ensure parent tables are populated before child tables in the processing order. Review the sequence of inserts in your batch logic.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Database deadlock detected during concurrent batch runs <span class="arrow">▼</span></button>
-        <div class="faq-a">Deadlocks occur when two processes lock the same rows in opposite order. Add retry logic with exponential backoff. Check if multiple batch instances are writing to the same table — consider serializing those jobs or using row-level locking hints.</div>
-      </div>
-    </div>
-    <button class="add-btn" onclick="openModal('db')">+ Add a question to Database Function</button>
+    <div class="faq-card" id="card-db"><div class="skeleton"></div><div class="skeleton"></div></div>
+    <button class="add-btn" onclick="openModal('db','add')">+ Add a question to Database Function</button>
   </div>
 
-  <!-- Configuration Function -->
+  <!-- Configuration -->
   <div id="section-cfg" class="section">
     <div class="section-header">
       <div class="sec-icon" style="background:#EFF6FF;">⚙️</div>
       <span class="sec-title">Configuration Function</span>
-      <span class="sec-count" id="count-cfg">4 questions</span>
+      <span class="sec-count" id="count-cfg">loading...</span>
     </div>
-    <div class="faq-card" id="card-cfg">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Batch not picking up updated config values after restart <span class="arrow">▼</span></button>
-        <div class="faq-a">DRS Ultra caches config on load. After editing a config file, ensure you do a full service restart and not just a reload. Also check that the correct config file path is referenced — multiple config files in different folders can cause confusion.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Environment-specific settings not applying in production <span class="arrow">▼</span></button>
-        <div class="faq-a">Confirm the <code>ENV</code> variable is set to <code>production</code> on the server. DRS Ultra uses environment flags to load the correct config overlay. If the flag is missing, it defaults to the base config which may have dev values.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Batch schedule not triggering at the configured time <span class="arrow">▼</span></button>
-        <div class="faq-a">Check the cron expression in the scheduler config for syntax errors. Verify the server timezone matches the expected trigger timezone. Also confirm the scheduler service itself is running — it can stop silently after a system reboot.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Config file changes get overwritten after deployment <span class="arrow">▼</span></button>
-        <div class="faq-a">Deployment pipelines often replace config files with defaults. Move environment-specific config to a location outside the deployment directory, or use a secrets manager. Reference that external path in the application config so it survives deployments.</div>
-      </div>
-    </div>
-    <button class="add-btn" onclick="openModal('cfg')">+ Add a question to Configuration Function</button>
+    <div class="faq-card" id="card-cfg"><div class="skeleton"></div><div class="skeleton"></div></div>
+    <button class="add-btn" onclick="openModal('cfg','add')">+ Add a question to Configuration Function</button>
   </div>
 
-  <!-- PLC Functions -->
+  <!-- PLC -->
   <div id="section-plc" class="section">
     <div class="section-header">
       <div class="sec-icon" style="background:#F0FDF4;">🔧</div>
       <span class="sec-title">PLC Functions</span>
-      <span class="sec-count" id="count-plc">4 questions</span>
+      <span class="sec-count" id="count-plc">loading...</span>
     </div>
-    <div class="faq-card" id="card-plc">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">PLC communication drops intermittently during batch run <span class="arrow">▼</span></button>
-        <div class="faq-a">Intermittent drops usually point to network instability or PLC scan cycle overload. Check the PLC CPU utilization during the batch window. Reduce polling frequency in the DRS config and add a reconnect handler so the batch resumes instead of failing on a drop.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">PLC tag values reading as zero even though machine is running <span class="arrow">▼</span></button>
-        <div class="faq-a">Zero reads often mean the tag address is wrong or the data block has shifted after a PLC program update. Verify the tag addresses in the DRS tag mapping config against the latest PLC program. A PLC upload after a program change is essential.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Batch writes to PLC not reflecting on the machine <span class="arrow">▼</span></button>
-        <div class="faq-a">Check if the PLC is in RUN mode and accepting writes. Some PLC models require write-enable to be set explicitly. Also verify that the DRS batch has write permission on that specific data block — read-only configurations are a common oversight.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">PLC timestamp mismatch causing data sync issues <span class="arrow">▼</span></button>
-        <div class="faq-a">Ensure the PLC clock is synced with the server via NTP. Even a few seconds of drift can cause out-of-order records in time-sensitive batch processing. Set a maximum acceptable clock skew in the DRS config and alert when it is exceeded.</div>
-      </div>
-    </div>
-    <button class="add-btn" onclick="openModal('plc')">+ Add a question to PLC Functions</button>
+    <div class="faq-card" id="card-plc"><div class="skeleton"></div><div class="skeleton"></div></div>
+    <button class="add-btn" onclick="openModal('plc','add')">+ Add a question to PLC Functions</button>
   </div>
 
-  <!-- Performance Enhancement -->
+  <!-- Performance -->
   <div id="section-perf" class="section">
     <div class="section-header">
       <div class="sec-icon" style="background:#F5F3FF;">⚡</div>
       <span class="sec-title">Performance Enhancement</span>
-      <span class="sec-count" id="count-perf">4 questions</span>
+      <span class="sec-count" id="count-perf">loading...</span>
     </div>
-    <div class="faq-card" id="card-perf">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Batch job takes too long to complete with large datasets <span class="arrow">▼</span></button>
-        <div class="faq-a">Break the dataset into smaller chunks using the <code>chunk_size</code> parameter. Enable parallel processing where the data allows. Add database indexes on the columns used in batch queries — missing indexes are the most common cause of slow bulk operations.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Memory usage climbs continuously and never drops <span class="arrow">▼</span></button>
-        <div class="faq-a">A steady memory climb usually means objects are being accumulated in a cache or collection without being cleared. Review loops that build lists across iterations. Implement a flush or clear step at the end of each chunk to release memory back to the system.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">CPU spikes to 100% during batch execution <span class="arrow">▼</span></button>
-        <div class="faq-a">Identify the processing step causing the spike using task manager or a profiler. Common causes are unoptimized string operations, nested loops, or too many simultaneous threads. Throttle thread count in the DRS config to match the server's core count.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggle(this)">Batch runs fine in testing but is slow in production <span class="arrow">▼</span></button>
-        <div class="faq-a">Production environments typically handle much larger data volumes and shared server load. Compare the <code>chunk_size</code>, thread count, and DB connection pool settings between environments. Also check if antivirus or monitoring agents are scanning batch output files in real time.</div>
-      </div>
-    </div>
-    <button class="add-btn" onclick="openModal('perf')">+ Add a question to Performance Enhancement</button>
+    <div class="faq-card" id="card-perf"><div class="skeleton"></div><div class="skeleton"></div></div>
+    <button class="add-btn" onclick="openModal('perf','add')">+ Add a question to Performance Enhancement</button>
   </div>
 
   <p class="no-result" id="no-result">No matching questions found.</p>
@@ -343,7 +380,7 @@
     <span>Do It Right Solutions</span><span class="footer-dot"></span>
     <span>DRS Ultra v6</span><span class="footer-dot"></span>
     <span>Bug Solving FAQ</span><span class="footer-dot"></span>
-    <span>Maintained by the team</span>
+    <span>☁️ Powered by Firebase</span>
   </footer>
 </div>
 
@@ -351,8 +388,8 @@
 <div class="modal-overlay" id="modal" onclick="overlayClick(event)">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-icon-wrap">➕</div>
-      <h3>Add a new question</h3>
+      <div class="modal-icon-wrap" id="modal-icon">➕</div>
+      <h3 id="modal-title">Add a new question</h3>
     </div>
     <div class="field">
       <label>Category</label>
@@ -371,76 +408,175 @@
       <label>Answer</label>
       <textarea id="modal-a" placeholder="Describe the cause and how to fix it..."></textarea>
     </div>
+    <div class="field">
+      <label>Added by</label>
+      <input type="text" id="modal-author" placeholder="Your name (optional)" />
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-save" onclick="addQuestion()">Add question</button>
+      <button class="btn-save" id="btn-save" onclick="saveQuestion()">Save</button>
     </div>
   </div>
 </div>
 
-<script>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDNMWEWWAi2tU72OVnWWhs-6vUC-BJiHis",
+  authDomain: "drs-ultra-faq.firebaseapp.com",
+  projectId: "drs-ultra-faq",
+  storageBucket: "drs-ultra-faq.firebasestorage.app",
+  messagingSenderId: "707477740",
+  appId: "1:707477740:web:2c95c678b7b8d8985d25c9"
+};
+
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
 const CATS = ['db','cfg','plc','perf'];
 
-function toggle(btn) {
-  const a = btn.nextElementSibling, ar = btn.querySelector('.arrow');
-  const open = a.classList.contains('open');
-  btn.closest('.faq-card').querySelectorAll('.faq-a').forEach(x => x.classList.remove('open'));
-  btn.closest('.faq-card').querySelectorAll('.arrow').forEach(x => x.classList.remove('open'));
-  if (!open) { a.classList.add('open'); ar.classList.add('open'); }
+let editMode=false, editDocId=null, editCat=null;
+
+function toast(msg,type='success'){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className='toast show '+type;
+  setTimeout(()=>el.className='toast',3000);
+}
+function loading(on){document.getElementById('loading-bar').classList.toggle('active',on);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function renderCard(cat,docs){
+  const card=document.getElementById('card-'+cat);
+  card.innerHTML='';
+  if(!docs.length){
+    card.innerHTML='<div class="empty-cat">No questions yet — be the first to add one!</div>';
+  } else {
+    docs.forEach(snap=>{
+      const d=snap.data();
+      const item=document.createElement('div');
+      item.className='faq-item';
+      item.innerHTML=`
+        <button class="faq-q" onclick="toggleQ(this)">
+          <span class="faq-q-text">${esc(d.question)}</span>
+          ${d.author?`<span class="q-meta">${esc(d.author)}</span>`:''}
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a">
+          <p>${esc(d.answer)}</p>
+          <div class="faq-actions">
+            <button class="btn-edit" onclick="openEdit('${snap.id}','${cat}','${esc(d.question)}','${esc(d.answer)}','${esc(d.author||'')}')">✏️ Edit</button>
+            <button class="btn-delete" onclick="delQ('${snap.id}','${cat}')">🗑 Delete</button>
+          </div>
+        </div>`;
+      card.appendChild(item);
+    });
+  }
+  const n=docs.length;
+  document.getElementById('count-'+cat).textContent=n+' question'+(n!==1?'s':'');
+  updateTotal();
 }
 
-function openModal(cat) {
-  document.getElementById('modal-cat').value = cat;
-  document.getElementById('modal-q').value = '';
-  document.getElementById('modal-a').value = '';
+function updateTotal(){
+  let t=0;
+  CATS.forEach(c=>{t+=document.querySelectorAll('#card-'+c+' .faq-item').length;});
+  document.getElementById('total-q').textContent=t;
+}
+
+CATS.forEach(cat=>{
+  onSnapshot(query(collection(db,'faq_'+cat),orderBy('createdAt','asc')),snap=>{
+    renderCard(cat,snap.docs);
+  },err=>toast('Error: '+err.message,'error'));
+});
+
+window.toggleQ=function(btn){
+  const a=btn.nextElementSibling,ar=btn.querySelector('.arrow');
+  const open=a.classList.contains('open');
+  btn.closest('.faq-card').querySelectorAll('.faq-a').forEach(x=>x.classList.remove('open'));
+  btn.closest('.faq-card').querySelectorAll('.arrow').forEach(x=>x.classList.remove('open'));
+  if(!open){a.classList.add('open');ar.classList.add('open');}
+};
+
+window.openModal=function(cat){
+  editMode=false;editDocId=null;editCat=null;
+  document.getElementById('modal-cat').value=cat;
+  document.getElementById('modal-cat').disabled=false;
+  document.getElementById('modal-q').value='';
+  document.getElementById('modal-a').value='';
+  document.getElementById('modal-author').value='';
+  document.getElementById('modal-title').textContent='Add a new question';
+  document.getElementById('modal-icon').textContent='➕';
+  document.getElementById('btn-save').textContent='Add question';
   document.getElementById('modal').classList.add('open');
-}
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
-function overlayClick(e) { if (e.target === document.getElementById('modal')) closeModal(); }
+};
 
-function addQuestion() {
-  const cat = document.getElementById('modal-cat').value;
-  const q = document.getElementById('modal-q').value.trim();
-  const a = document.getElementById('modal-a').value.trim();
-  if (!q || !a) { alert('Please fill in both the question and answer.'); return; }
-  const card = document.getElementById('card-' + cat);
-  const item = document.createElement('div');
-  item.className = 'faq-item';
-  item.innerHTML = `<button class="faq-q" onclick="toggle(this)">${q} <span class="badge-new">New</span> <span class="arrow">▼</span></button><div class="faq-a">${a}</div>`;
-  card.appendChild(item);
-  updateCounts();
-  closeModal();
-}
+window.openEdit=function(id,cat,q,a,author){
+  editMode=true;editDocId=id;editCat=cat;
+  document.getElementById('modal-cat').value=cat;
+  document.getElementById('modal-cat').disabled=true;
+  document.getElementById('modal-q').value=q;
+  document.getElementById('modal-a').value=a;
+  document.getElementById('modal-author').value=author;
+  document.getElementById('modal-title').textContent='Edit question';
+  document.getElementById('modal-icon').textContent='✏️';
+  document.getElementById('btn-save').textContent='Save changes';
+  document.getElementById('modal').classList.add('open');
+};
 
-function updateCounts() {
-  let total = 0;
-  CATS.forEach(cat => {
-    const n = document.querySelectorAll('#card-' + cat + ' .faq-item').length;
-    document.getElementById('count-' + cat).textContent = n + ' question' + (n !== 1 ? 's' : '');
-    total += n;
-  });
-  document.getElementById('total-q').textContent = total;
-}
+window.closeModal=function(){
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal-cat').disabled=false;
+};
+window.overlayClick=function(e){if(e.target===document.getElementById('modal'))closeModal();};
 
-function filterCat(cat, btn) {
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+window.saveQuestion=async function(){
+  const cat=editMode?editCat:document.getElementById('modal-cat').value;
+  const q=document.getElementById('modal-q').value.trim();
+  const a=document.getElementById('modal-a').value.trim();
+  const author=document.getElementById('modal-author').value.trim();
+  if(!q||!a){toast('Please fill in question and answer!','error');return;}
+  const btn=document.getElementById('btn-save');
+  btn.disabled=true;btn.textContent=editMode?'Saving...':'Adding...';
+  loading(true);
+  try{
+    if(editMode){
+      await updateDoc(doc(db,'faq_'+cat,editDocId),{question:q,answer:a,author,updatedAt:new Date()});
+      toast('✅ Question updated!');
+    } else {
+      await addDoc(collection(db,'faq_'+cat),{question:q,answer:a,author,createdAt:new Date()});
+      toast('✅ Question saved to cloud!');
+    }
+    closeModal();
+  }catch(e){toast('❌ Failed: '+e.message,'error');}
+  finally{btn.disabled=false;btn.textContent=editMode?'Save changes':'Add question';loading(false);}
+};
+
+window.delQ=async function(id,cat){
+  if(!confirm('Delete this question permanently?'))return;
+  loading(true);
+  try{await deleteDoc(doc(db,'faq_'+cat,id));toast('🗑 Question deleted');}
+  catch(e){toast('❌ '+e.message,'error');}
+  finally{loading(false);}
+};
+
+window.filterCat=function(cat,btn){
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  CATS.forEach(c => {
-    document.getElementById('section-' + c).style.display = (cat === 'all' || cat === c) ? '' : 'none';
-  });
-}
+  CATS.forEach(c=>{document.getElementById('section-'+c).style.display=(cat==='all'||cat===c)?'':'none';});
+};
 
-function filterAll(val) {
-  const q = val.toLowerCase();
-  let any = false;
-  document.querySelectorAll('.faq-item').forEach(item => {
-    const txt = item.querySelector('.faq-q').textContent.toLowerCase();
-    const match = txt.includes(q);
-    item.style.display = match ? '' : 'none';
-    if (match) any = true;
+window.filterAll=function(val){
+  const q=val.toLowerCase();let any=false;
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    const txt=item.querySelector('.faq-q').textContent.toLowerCase();
+    const match=txt.includes(q);
+    item.style.display=match?'':'none';
+    if(match)any=true;
   });
-  document.getElementById('no-result').style.display = (val && !any) ? 'block' : 'none';
-}
+  document.getElementById('no-result').style.display=(val&&!any)?'block':'none';
+};
 </script>
 </body>
 </html>
