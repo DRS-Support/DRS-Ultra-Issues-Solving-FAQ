@@ -294,11 +294,12 @@
     <div class="field">
       <label>Question</label>
       <input type="text" id="modal-q" placeholder="e.g. Why does the batch skip certain records?" />
+      <div class="field-hint">💡 Wrap text in <code>**word**</code> to make it <strong>bold</strong>.</div>
     </div>
     <div class="field">
       <label>Answer</label>
-      <textarea id="modal-a" placeholder="Type your answer here...&#10;&#10;Press Enter for new lines — they will be preserved exactly as you type."></textarea>
-      <div class="field-hint">💡 Press Enter for new lines — formatting will be preserved.</div>
+      <textarea id="modal-a" placeholder="Type your answer here...&#10;&#10;Press Enter for new lines — they will be preserved.&#10;Wrap text in **double asterisks** to make it bold."></textarea>
+      <div class="field-hint">💡 Press Enter for new lines · Use <code>**word**</code> to make a word <strong>bold</strong>.</div>
     </div>
     <div class="field">
       <label>Added by</label>
@@ -354,6 +355,12 @@ function esc(s) {
     .replace(/"/g,'&quot;');
 }
 
+// Format text: escapes HTML first, then converts **text** → <strong>text</strong>
+// Safe because we escape BEFORE adding the <strong> tag.
+function formatText(s) {
+  return esc(s).replace(/\*\*([^\*\n]+?)\*\*/g, '<strong>$1</strong>');
+}
+
 function renderCard(cat, docs) {
   const card = document.getElementById('card-' + cat);
   card.innerHTML = '';
@@ -373,7 +380,7 @@ function renderCard(cat, docs) {
       // Use textContent via DOM for answer so line breaks are safe
       item.innerHTML = `
         <button class="faq-q" onclick="toggleQ(this)">
-          <span class="faq-q-text">${esc(d.question)}</span>
+          <span class="faq-q-text">${formatText(d.question)}</span>
           ${d.author ? `<span class="q-meta">${esc(d.author)}</span>` : ''}
           <span class="arrow">▼</span>
         </button>
@@ -385,8 +392,8 @@ function renderCard(cat, docs) {
           </div>
         </div>`;
 
-      // Set answer text safely — preserves \n as visual line breaks via white-space:pre-wrap
-      item.querySelector('.answer-text').textContent = d.answer;
+      // Render answer with **bold** formatting; line breaks preserved via white-space:pre-wrap
+      item.querySelector('.answer-text').innerHTML = formatText(d.answer);
       card.appendChild(item);
     });
   }
