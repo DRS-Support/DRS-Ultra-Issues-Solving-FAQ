@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DRS Ultra Batch — Bug Solving FAQ</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-dark: #0C447C;
+    --green: #1D9E75;
+    --green-light: #E1F5EE;
+    --green-dark: #085041;
+    --amber: #EF9F27;
+    --amber-light: #FAEEDA;
+    --amber-dark: #633806;
+    --bg: #f4f6f9;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.08);
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .container { max-width: 760px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    background: var(--blue);
+    border-radius: var(--radius);
+    padding: 2rem 1.75rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: 60px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .header-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    background: rgba(255,255,255,0.15);
+    color: #B5D4F4;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+  .header h1 { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .header p { font-size: 13px; color: #B5D4F4; }
+
+  /* Controls */
+  .controls { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .search-wrap { flex: 1; min-width: 200px; position: relative; }
+  .search-wrap input {
+    width: 100%;
+    padding: 0.6rem 0.9rem 0.6rem 2.25rem;
+    font-size: 13px;
+    font-family: 'Sora', sans-serif;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+  }
+  .search-wrap input:focus { border-color: var(--blue); }
+  .search-icon {
+    position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);
+    width: 14px; height: 14px; opacity: 0.4;
+  }
+
+  .cats { display: flex; gap: 8px; flex-wrap: wrap; }
+  .cat-btn {
+    font-size: 12px; font-weight: 500; font-family: 'Sora', sans-serif;
+    padding: 5px 14px; border-radius: 20px; border: 1.5px solid transparent;
+    cursor: pointer; transition: all 0.2s; opacity: 0.5;
+  }
+  .cat-btn.active { opacity: 1; }
+  .cat-btn.all { background: var(--blue-light); color: var(--blue-dark); border-color: #85B7EB; }
+  .cat-btn.data { background: var(--green-light); color: var(--green-dark); border-color: #5DCAA5; }
+  .cat-btn.perf { background: var(--amber-light); color: var(--amber-dark); border-color: var(--amber); }
+
+  /* Section */
+  .section { margin-bottom: 2rem; }
+  .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
+  .sec-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .dot-data { background: var(--green); }
+  .dot-perf { background: var(--amber); }
+  .sec-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .sec-count {
+    margin-left: auto; font-size: 11px; font-family: 'IBM Plex Mono', monospace;
+    color: var(--muted); background: #f0f0f0; padding: 2px 8px; border-radius: 10px;
+  }
+
+  /* FAQ Card */
+  .faq-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    width: 100%; background: none; border: none; text-align: left;
+    padding: 0.9rem 1.1rem; font-size: 13.5px; font-weight: 500;
+    font-family: 'Sora', sans-serif; color: var(--text);
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    transition: background 0.15s;
+  }
+  .faq-q:hover { background: #f9fafb; }
+  .faq-a {
+    font-size: 13px; color: var(--muted); line-height: 1.8;
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 1.1rem; background: #fafafa;
+    border-top: 0px solid var(--border);
+  }
+  .faq-a.open { max-height: 300px; padding: 0.85rem 1.1rem; border-top: 1px solid var(--border); }
+  .faq-a code {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    background: #eef0f3; padding: 1px 6px; border-radius: 4px; color: #374151;
+  }
+  .arrow { font-size: 10px; color: var(--muted); transition: transform 0.3s; flex-shrink: 0; }
+  .arrow.open { transform: rotate(180deg); }
+  .badge-new {
+    font-size: 10px; padding: 2px 7px; border-radius: 10px;
+    background: var(--green-light); color: var(--green-dark);
+    font-weight: 500; margin-left: 6px; vertical-align: middle;
+  }
+
+  /* Add button */
+  .add-btn {
+    width: 100%; margin-top: 0.6rem; padding: 0.65rem;
+    font-size: 13px; font-weight: 500; font-family: 'Sora', sans-serif;
+    background: transparent; border: 1.5px dashed rgba(0,0,0,0.15);
+    border-radius: 10px; cursor: pointer; color: var(--muted); transition: all 0.2s;
+  }
+  .add-btn:hover { background: var(--surface); color: var(--text); border-color: rgba(0,0,0,0.25); }
+
+  /* Modal */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4); align-items: center; justify-content: center; z-index: 100;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border-radius: var(--radius);
+    border: 1px solid var(--border); padding: 1.5rem;
+    width: 92%; max-width: 480px; animation: popIn 0.2s ease;
+  }
+  @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 1.1rem; }
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 5px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .field input, .field textarea, .field select {
+    width: 100%; padding: 0.6rem 0.8rem; font-size: 13px;
+    font-family: 'Sora', sans-serif; border: 1px solid var(--border);
+    border-radius: 8px; background: #fafafa; color: var(--text); outline: none;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--blue); background: #fff; }
+  .field textarea { height: 90px; resize: vertical; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 1.25rem; }
+  .modal-actions button {
+    flex: 1; padding: 0.65rem; font-size: 13px; font-weight: 500;
+    font-family: 'Sora', sans-serif; border-radius: 8px; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .btn-cancel:hover { background: #f0f0f0; }
+  .btn-save { background: var(--blue); border: none; color: #fff; }
+  .btn-save:hover { background: var(--blue-dark); }
+
+  .no-result { font-size: 13px; color: var(--muted); padding: 1.5rem 0; display: none; text-align: center; }
+
+  footer { text-align: center; font-size: 12px; color: var(--muted); margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-tag">v1.0 · DRS Ultra Batch</div>
+    <h1>Bug Solving FAQ</h1>
+    <p>Team reference guide · Anyone can contribute a question</p>
+  </div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="text" id="search" placeholder="Search questions..." oninput="filterAll(this.value)" />
+    </div>
+    <div class="cats">
+      <button class="cat-btn all active" onclick="filterCat('all',this)">All</button>
+      <button class="cat-btn data" onclick="filterCat('data',this)">Data errors</button>
+      <button class="cat-btn perf" onclick="filterCat('perf',this)">Performance</button>
+    </div>
+  </div>
+
+  <!-- Data Processing Section -->
+  <div id="section-data" class="section">
+    <div class="section-header">
+      <div class="sec-dot dot-data"></div>
+      <span class="sec-title">Data processing errors</span>
+      <span class="sec-count" id="count-data">4 questions</span>
+    </div>
+    <div class="faq-card" id="card-data">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Batch job fails with a null pointer or missing field error <span class="arrow">▼</span></button>
+        <div class="faq-a">Usually caused by missing or malformed input records. Check the input file for empty required fields before the batch runs. Add a pre-validation step that flags nulls early rather than letting the job crash mid-run.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Records processed but output data looks wrong or corrupted <span class="arrow">▼</span></button>
+        <div class="faq-a">Often a data type mismatch — a string parsed as a number. Verify field mappings in the batch config and check if any upstream system changed its format. Enable verbose logging to trace the exact step where values diverge.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Duplicate records appearing in the output <span class="arrow">▼</span></button>
+        <div class="faq-a">Duplicates happen when a batch retries after a partial failure without clearing previously written records. Use <code>batch_id</code> tracking to prevent reprocessing already-committed records.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Batch completes but some records are silently skipped <span class="arrow">▼</span></button>
+        <div class="faq-a">Silent skips happen when error handling swallows exceptions without logging. Ensure skipped records are written to a dead-letter log. Cross-check input vs output record count after every run.</div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="openModal('data')">+ Add a question to this category</button>
+  </div>
+
+  <!-- Performance Section -->
+  <div id="section-perf" class="section">
+    <div class="section-header">
+      <div class="sec-dot dot-perf"></div>
+      <span class="sec-title">Performance / timeout issues</span>
+      <span class="sec-count" id="count-perf">4 questions</span>
+    </div>
+    <div class="faq-card" id="card-perf">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Batch job times out before completing <span class="arrow">▼</span></button>
+        <div class="faq-a">Check if the timeout threshold matches the expected data volume. Look for missing database indexes on columns used in batch queries. Consider splitting large batches into smaller chunks using a configurable <code>chunk_size</code> parameter.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Job runs much slower than usual with the same data size <span class="arrow">▼</span></button>
+        <div class="faq-a">A sudden slowdown usually means resource contention — check if another heavy process is running simultaneously. Also check memory usage; if garbage collection is frequent, heap size may need to be increased.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Batch hangs indefinitely and never finishes or fails <span class="arrow">▼</span></button>
+        <div class="faq-a">A hang is often a deadlock on a database lock or an infinite retry loop. Check active DB sessions for blocked queries. Add a max-retry limit and a job-level timeout watchdog so the process alerts the team rather than hanging silently.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggle(this)">Memory usage spikes and the process crashes mid-batch <span class="arrow">▼</span></button>
+        <div class="faq-a">Avoid loading the entire dataset into memory at once. Switch to a streaming or cursor-based approach that reads records in pages. Review in-memory caches that accumulate data across iterations without being cleared.</div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="openModal('perf')">+ Add a question to this category</button>
+  </div>
+
+  <p class="no-result" id="no-result">No matching questions found.</p>
+
+  <footer>DRS Ultra Batch · Bug Solving FAQ · Maintained by the team</footer>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" onclick="overlayClick(event)">
+  <div class="modal">
+    <h3>Add a new question</h3>
+    <div class="field">
+      <label>Category</label>
+      <select id="modal-cat">
+        <option value="data">Data processing errors</option>
+        <option value="perf">Performance / timeout issues</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Question</label>
+      <input type="text" id="modal-q" placeholder="e.g. Why does the batch skip weekends?" />
+    </div>
+    <div class="field">
+      <label>Answer</label>
+      <textarea id="modal-a" placeholder="Describe the cause and how to fix it..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="addQuestion()">Add question</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggle(btn) {
+  const a = btn.nextElementSibling, ar = btn.querySelector('.arrow');
+  const open = a.classList.contains('open');
+  btn.closest('.faq-card').querySelectorAll('.faq-a').forEach(x => x.classList.remove('open'));
+  btn.closest('.faq-card').querySelectorAll('.arrow').forEach(x => x.classList.remove('open'));
+  if (!open) { a.classList.add('open'); ar.classList.add('open'); }
+}
+
+function openModal(cat) {
+  document.getElementById('modal-cat').value = cat;
+  document.getElementById('modal-q').value = '';
+  document.getElementById('modal-a').value = '';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function overlayClick(e) { if (e.target === document.getElementById('modal')) closeModal(); }
+
+function addQuestion() {
+  const cat = document.getElementById('modal-cat').value;
+  const q = document.getElementById('modal-q').value.trim();
+  const a = document.getElementById('modal-a').value.trim();
+  if (!q || !a) { alert('Please fill in both the question and answer.'); return; }
+  const card = document.getElementById('card-' + cat);
+  const item = document.createElement('div');
+  item.className = 'faq-item';
+  item.innerHTML = `<button class="faq-q" onclick="toggle(this)">${q} <span class="badge-new">New</span> <span class="arrow">▼</span></button><div class="faq-a">${a}</div>`;
+  card.appendChild(item);
+  updateCounts();
+  closeModal();
+}
+
+function updateCounts() {
+  ['data', 'perf'].forEach(cat => {
+    const n = document.querySelectorAll('#card-' + cat + ' .faq-item').length;
+    document.getElementById('count-' + cat).textContent = n + ' question' + (n !== 1 ? 's' : '');
+  });
+}
+
+let currentCat = 'all';
+function filterCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('section-data').style.display = (cat === 'all' || cat === 'data') ? '' : 'none';
+  document.getElementById('section-perf').style.display = (cat === 'all' || cat === 'perf') ? '' : 'none';
+}
+
+function filterAll(val) {
+  const q = val.toLowerCase();
+  let any = false;
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const btn = item.querySelector('.faq-q');
+    const txt = btn.textContent.toLowerCase();
+    const match = txt.includes(q);
+    item.style.display = match ? '' : 'none';
+    if (match) any = true;
+  });
+  document.getElementById('no-result').style.display = (val && !any) ? 'block' : 'none';
+}
+</script>
+</body>
+</html>
