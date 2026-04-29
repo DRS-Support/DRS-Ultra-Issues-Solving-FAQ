@@ -56,7 +56,7 @@
 
   .hero-content { padding:1.5rem 0 0.25rem; }
   .hero-live { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22); color:#fff; font-size:11px; font-weight:700; font-family:'IBM Plex Mono',monospace; padding:5px 14px; border-radius:20px; margin-bottom:0.85rem; letter-spacing:0.06em; }
-  .live-dot { width:7px; height:7px; border-radius:50%; background:#1cfa08; animation:blink 2s infinite; }
+  .live-dot { width:7px; height:7px; border-radius:50%; background:#1cfa08; animation:blink 1.5s infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
   .hero h1 { font-size:30px; font-weight:800; color:#fff; letter-spacing:-0.5px; line-height:1.2; margin-bottom:0.55rem; text-shadow:0 2px 14px rgba(0,0,0,0.2); }
   .hero h1 .tag { font-family:'Orbitron',sans-serif; font-size:24px; font-weight:900; background:rgba(255,255,255,0.15); padding:3px 12px; border-radius:8px; display:inline-block; letter-spacing:0.05em; border:1px solid rgba(255,255,255,0.2); }
@@ -82,9 +82,13 @@
 
   .controls { display:flex; gap:10px; margin-bottom:2rem; flex-wrap:wrap; background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
   .search-wrap { flex:1; min-width:200px; position:relative; }
-  .search-wrap input { width:100%; padding:0.65rem 0.9rem 0.65rem 2.4rem; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; border:1px solid var(--border); border-radius:9px; background:var(--bg); color:var(--text); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
+  .search-wrap input { width:100%; padding:0.65rem 2.2rem 0.65rem 2.4rem; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; border:1px solid var(--border); border-radius:9px; background:var(--bg); color:var(--text); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
   .search-wrap input:focus { border-color:var(--orange); background:#fff; box-shadow:0 0 0 3px rgba(255,107,0,0.12); }
   .search-icon { position:absolute; left:0.8rem; top:50%; transform:translateY(-50%); width:14px; height:14px; opacity:0.35; }
+  .search-clear { position:absolute; right:0.6rem; top:50%; transform:translateY(-50%); width:22px; height:22px; border-radius:50%; border:none; background:#e5e5e5; color:#666; font-size:14px; font-weight:700; cursor:pointer; display:none; align-items:center; justify-content:center; line-height:1; padding:0; }
+  .search-clear:hover { background:#d0d0d0; color:#000; }
+  .search-clear.show { display:flex; }
+  mark.hl { background:#ffe066; color:inherit; padding:0 2px; border-radius:2px; }
   .cats { display:flex; gap:7px; flex-wrap:wrap; align-items:center; }
   .cat-btn { font-size:11px; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; padding:6px 13px; border-radius:8px; border:1.5px solid transparent; cursor:pointer; transition:all 0.2s; opacity:0.45; }
   .cat-btn.active { opacity:1; }
@@ -281,7 +285,8 @@
   <div class="controls">
     <div class="search-wrap">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" id="search" placeholder="Search questions..." oninput="filterAll(this.value)" />
+      <input type="text" id="search" placeholder="Search questions or answers..." />
+      <button type="button" class="search-clear" id="search-clear" title="Clear search">×</button>
     </div>
     <div class="cats">
       <button class="cat-btn all active" onclick="filterCat('all',this)">All</button>
@@ -468,6 +473,12 @@ function renderCard(cat, docs) {
   const n = docs.length;
   document.getElementById('count-' + cat).textContent = n + ' question' + (n !== 1 ? 's' : '');
   updateTotal();
+
+  // Re-apply any active search to newly rendered items
+  if (typeof window.filterAll === 'function') {
+    const s = document.getElementById('search');
+    if (s && s.value.trim()) window.filterAll(s.value);
+  }
 }
 
 function updateTotal() {
@@ -584,26 +595,96 @@ window.delQ = async function(id, cat) {
   } finally { loading(false); }
 };
 
-// Category filter
+// Category filter — works together with the search filter
 window.filterCat = function(cat, btn) {
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  CATS.forEach(c => {
-    document.getElementById('section-' + c).style.display = (cat === 'all' || cat === c) ? '' : 'none';
-  });
+  activeCat = cat;
+  // Re-run search so category + search stay in sync
+  const s = document.getElementById('search');
+  window.filterAll(s ? s.value : '');
 };
 
-// Search
+// Active category filter — kept in sync with filterCat, used by search
+let activeCat = 'all';
+
+// Search — matches BOTH questions and answers, hides empty sections, opens matches
 window.filterAll = function(val) {
-  const q = val.toLowerCase(); let any = false;
-  document.querySelectorAll('.faq-item').forEach(item => {
-    const txt = item.querySelector('.faq-q').textContent.toLowerCase();
-    const match = txt.includes(q);
-    item.style.display = match ? '' : 'none';
-    if (match) any = true;
+  const q = (val || '').trim().toLowerCase();
+  const searching = q.length > 0;
+  let totalMatches = 0;
+
+  CATS.forEach(cat => {
+    const section = document.getElementById('section-' + cat);
+    if (!section) return;
+
+    // If a category filter is active and this isn't it, keep it hidden
+    if (activeCat !== 'all' && activeCat !== cat) {
+      section.style.display = 'none';
+      return;
+    }
+
+    const items = section.querySelectorAll('.faq-item');
+    let sectionMatches = 0;
+
+    items.forEach(item => {
+      const id = item.dataset.docid;
+      const stored = id && docStore[id] ? docStore[id] : null;
+      const qText = stored ? stored.question : (item.querySelector('.faq-q-text')?.textContent || '');
+      const aText = stored ? stored.answer   : (item.querySelector('.answer-text')?.textContent || '');
+      const author = stored ? (stored.author || '') : '';
+      const haystack = (qText + ' ' + aText + ' ' + author).toLowerCase();
+
+      const match = !searching || haystack.includes(q);
+      item.style.display = match ? '' : 'none';
+      if (match) sectionMatches++;
+
+      // Auto-open matching item when searching, close when cleared
+      const ans   = item.querySelector('.faq-a');
+      const arrow = item.querySelector('.arrow');
+      if (searching && match) {
+        ans?.classList.add('open');
+        arrow?.classList.add('open');
+      } else if (!searching) {
+        ans?.classList.remove('open');
+        arrow?.classList.remove('open');
+      }
+    });
+
+    totalMatches += sectionMatches;
+
+    // Hide the entire section if searching and nothing in it matches
+    if (searching && sectionMatches === 0) {
+      section.style.display = 'none';
+    } else {
+      section.style.display = '';
+    }
+
+    // Hide "No questions yet" placeholder + the add button while searching
+    const empty = section.querySelector('.empty-cat');
+    if (empty) empty.style.display = searching ? 'none' : '';
+    const addBtn = section.querySelector('.add-btn');
+    if (addBtn) addBtn.style.display = searching ? 'none' : '';
   });
-  document.getElementById('no-result').style.display = (val && !any) ? 'block' : 'none';
+
+  // No-result banner
+  const banner = document.getElementById('no-result');
+  if (banner) banner.style.display = (searching && totalMatches === 0) ? 'block' : 'none';
+
+  // Show/hide the clear (×) button
+  const clr = document.getElementById('search-clear');
+  if (clr) clr.classList.toggle('show', searching);
 };
+
+// Wire up search + clear button after DOM is ready (module scripts are deferred,
+// so this avoids a race where typing happens before the handler is attached).
+const searchEl = document.getElementById('search');
+const clearEl  = document.getElementById('search-clear');
+if (searchEl) searchEl.addEventListener('input', e => window.filterAll(e.target.value));
+if (clearEl)  clearEl.addEventListener('click', () => {
+  if (searchEl) { searchEl.value = ''; searchEl.focus(); }
+  window.filterAll('');
+});
 </script>
 </body>
 </html>
