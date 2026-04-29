@@ -19,142 +19,48 @@
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
-  /* ── HERO ── */
   .hero {
     background: linear-gradient(135deg, #7A1A00 0%, #CC3300 20%, #FF6B00 50%, #FF9500 75%, #FFB800 100%);
     position:relative; overflow:hidden;
   }
-  .hero-pattern {
-    position:absolute; inset:0;
-    background-image: repeating-linear-gradient(45deg,rgba(255,255,255,0.025) 0px,rgba(255,255,255,0.025) 1px,transparent 1px,transparent 24px);
-  }
+  .hero-pattern { position:absolute; inset:0; background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.025) 0px,rgba(255,255,255,0.025) 1px,transparent 1px,transparent 24px); }
   .hero-c1 { position:absolute; width:600px; height:600px; border-radius:50%; background:rgba(255,255,255,0.05); top:-200px; right:-150px; }
   .hero-c2 { position:absolute; width:300px; height:300px; border-radius:50%; background:rgba(0,0,0,0.08); bottom:-100px; left:80px; }
   .hero-c3 { position:absolute; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,0.06); top:60px; left:260px; }
   .hero-inner { position:relative; z-index:2; max-width:900px; margin:0 auto; padding:0 2rem; }
 
-  /* ── LOGO BAR ── */
   .logo-bar {
     display:flex; align-items:center; gap:22px;
-    padding: 22px 0 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
-    background: rgba(0,0,0,0.2);
-    margin: 0 -2rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding:22px 2rem 20px; border-bottom:1px solid rgba(255,255,255,0.15);
+    background:rgba(0,0,0,0.2); margin:0 -2rem;
   }
-
-  .logo-icon {
-    width:80px; height:80px; background:#fff; border-radius:18px;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 0 3px rgba(255,255,255,0.25);
-    flex-shrink:0; overflow:hidden; padding:7px;
-  }
+  .logo-icon { width:80px; height:80px; background:#fff; border-radius:18px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 32px rgba(0,0,0,0.35),0 0 0 3px rgba(255,255,255,0.25); flex-shrink:0; overflow:hidden; padding:7px; }
   .logo-icon img { width:100%; height:100%; object-fit:contain; }
   .logo-pyramid-svg { display:none; width:66px; height:66px; }
-
-  /* Company name area */
   .logo-text { flex:1; }
-
-  .company-name {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 20px;
-    font-weight: 900;
-    color: #fff;
-    letter-spacing: 0.05em;
-    line-height: 1.1;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
-  }
-
-  .company-slogan {
-    font-family: 'Playfair Display', serif;
-    font-size: 14px;
-    font-style: italic;
-    font-weight: 700;
-    color: rgba(255,255,255,0.9);
-    margin-top: 5px;
-    letter-spacing: 0.03em;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.2);
-  }
-
+  .company-name { font-family:'Orbitron',sans-serif; font-size:20px; font-weight:900; color:#fff; letter-spacing:0.05em; line-height:1.1; text-shadow:0 2px 12px rgba(0,0,0,0.3); }
+  .company-slogan { font-family:'Playfair Display',serif; font-size:14px; font-style:italic; font-weight:700; color:rgba(255,255,255,0.9); margin-top:5px; letter-spacing:0.03em; text-shadow:0 1px 6px rgba(0,0,0,0.2); }
   .company-tags { display:flex; gap:8px; margin-top:10px; }
-  .ctag {
-    font-size:9px; font-weight:700; letter-spacing:0.1em;
-    background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22);
-    color:rgba(255,255,255,0.9); padding:3px 10px; border-radius:20px;
-    font-family:'IBM Plex Mono',monospace;
-  }
+  .ctag { font-size:9px; font-weight:700; letter-spacing:0.1em; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22); color:rgba(255,255,255,0.9); padding:3px 10px; border-radius:20px; font-family:'IBM Plex Mono',monospace; }
+  .version-badge { flex-shrink:0; text-align:center; background:rgba(0,0,0,0.28); border:2px solid rgba(255,255,255,0.35); border-radius:16px; padding:12px 24px; box-shadow:0 4px 20px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.1); }
+  .version-label { font-family:'Orbitron',sans-serif; font-size:9px; font-weight:700; color:rgba(255,255,255,0.65); letter-spacing:0.15em; margin-bottom:4px; }
+  .version-number { font-family:'Bebas Neue',sans-serif; font-size:52px; line-height:1; color:#fff; letter-spacing:2px; text-shadow:0 0 30px rgba(255,200,100,0.6),0 4px 16px rgba(0,0,0,0.4); }
+  .version-product { font-family:'Orbitron',sans-serif; font-size:10px; font-weight:900; color:rgba(255,220,150,0.95); letter-spacing:0.18em; margin-top:4px; text-shadow:0 0 12px rgba(255,180,50,0.5); }
 
-  /* Version badge */
-  .version-badge {
-    flex-shrink:0; text-align:center;
-    background: rgba(0,0,0,0.28);
-    border: 2px solid rgba(255,255,255,0.35);
-    border-radius:16px; padding:12px 24px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
-  }
-  .version-label {
-    font-family:'Orbitron',sans-serif;
-    font-size:9px; font-weight:700;
-    color:rgba(255,255,255,0.65); letter-spacing:0.15em;
-    margin-bottom:4px;
-  }
-  .version-number {
-    font-family:'Bebas Neue',sans-serif;
-    font-size:52px; line-height:1;
-    color:#fff;
-    letter-spacing:2px;
-    text-shadow: 0 0 30px rgba(255,200,100,0.6), 0 4px 16px rgba(0,0,0,0.4);
-  }
-  .version-product {
-    font-family:'Orbitron',sans-serif;
-    font-size:10px; font-weight:900;
-    color:rgba(255,220,150,0.95); letter-spacing:0.18em;
-    margin-top:4px;
-    text-shadow: 0 0 12px rgba(255,180,50,0.5);
-  }
-
-  /* ── HERO CONTENT ── */
   .hero-content { padding:2rem 0 0; }
-
-  .hero-live {
-    display:inline-flex; align-items:center; gap:7px;
-    background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22);
-    color:#fff; font-size:11px; font-weight:700;
-    font-family:'IBM Plex Mono',monospace;
-    padding:5px 14px; border-radius:20px; margin-bottom:1.1rem; letter-spacing:0.06em;
-  }
+  .hero-live { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22); color:#fff; font-size:11px; font-weight:700; font-family:'IBM Plex Mono',monospace; padding:5px 14px; border-radius:20px; margin-bottom:1.1rem; letter-spacing:0.06em; }
   .live-dot { width:7px; height:7px; border-radius:50%; background:#fff; animation:blink 1.5s infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-  .hero h1 {
-    font-size:36px; font-weight:800; color:#fff;
-    letter-spacing:-0.5px; line-height:1.15; margin-bottom:0.6rem;
-    text-shadow:0 2px 14px rgba(0,0,0,0.2);
-    font-family:'Plus Jakarta Sans',sans-serif;
-  }
-  .hero h1 .tag {
-    font-family:'Orbitron',sans-serif;
-    font-size:28px; font-weight:900;
-    background:rgba(255,255,255,0.15); padding:4px 14px;
-    border-radius:8px; display:inline-block;
-    letter-spacing:0.05em;
-    border: 1px solid rgba(255,255,255,0.2);
-  }
+  .hero h1 { font-size:36px; font-weight:800; color:#fff; letter-spacing:-0.5px; line-height:1.15; margin-bottom:0.6rem; text-shadow:0 2px 14px rgba(0,0,0,0.2); }
+  .hero h1 .tag { font-family:'Orbitron',sans-serif; font-size:28px; font-weight:900; background:rgba(255,255,255,0.15); padding:4px 14px; border-radius:8px; display:inline-block; letter-spacing:0.05em; border:1px solid rgba(255,255,255,0.2); }
   .hero-sub { font-size:14px; color:rgba(255,255,255,0.88); line-height:1.7; max-width:520px; margin-bottom:1.75rem; }
-
-  .hero-stats {
-    display:flex; background:rgba(0,0,0,0.18); border-radius:12px;
-    overflow:hidden; border:1px solid rgba(255,255,255,0.13);
-  }
+  .hero-stats { display:flex; background:rgba(0,0,0,0.18); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.13); }
   .stat { flex:1; padding:14px 10px; text-align:center; border-right:1px solid rgba(255,255,255,0.1); }
   .stat:last-child { border-right:none; }
   .stat-num { font-size:22px; font-weight:800; color:#fff; font-family:'Bebas Neue',monospace; display:block; letter-spacing:1px; }
   .stat-label { font-size:9px; color:rgba(255,255,255,0.65); margin-top:2px; display:block; font-weight:700; letter-spacing:0.1em; font-family:'IBM Plex Mono',monospace; }
-
   .hero-wave { display:block; width:100%; height:48px; margin-top:-1px; }
 
-  /* ── MAIN ── */
   .main { max-width:900px; margin:0 auto; padding:1.5rem 2rem 3rem; }
 
   .toast { position:fixed; bottom:24px; right:24px; background:#1a1a1a; color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:500; z-index:999; opacity:0; transform:translateY(10px); transition:all 0.3s; pointer-events:none; max-width:300px; }
@@ -190,17 +96,18 @@
   .faq-card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.04); }
   .faq-item { border-bottom:1px solid var(--border); }
   .faq-item:last-child { border-bottom:none; }
-
   .faq-q { width:100%; background:none; border:none; text-align:left; padding:1rem 1.15rem; font-size:13.5px; font-weight:500; font-family:'Plus Jakarta Sans',sans-serif; color:var(--text); cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:8px; transition:background 0.15s; }
   .faq-q:hover { background:#fdf6f0; }
   .faq-q-text { flex:1; }
   .q-meta { font-size:10px; color:#bbb; font-family:'IBM Plex Mono',monospace; white-space:nowrap; }
-
-  .faq-a { font-size:13px; color:var(--muted); line-height:1.85; max-height:0; overflow:hidden; transition:max-height 0.35s ease,padding 0.35s ease; padding:0 1.15rem; background:#fffaf6; }
-  .faq-a.open { max-height:500px; padding:0.9rem 1.15rem; border-top:1px solid var(--border); }
+  .faq-a { font-size:13px; color:var(--muted); line-height:1.85; max-height:0; overflow:hidden; transition:max-height 0.4s ease,padding 0.35s ease; padding:0 1.15rem; background:#fffaf6; }
+  .faq-a.open { max-height:800px; padding:0.9rem 1.15rem; border-top:1px solid var(--border); }
   .faq-a code { font-family:'IBM Plex Mono',monospace; font-size:12px; background:#ffeedd; padding:1px 6px; border-radius:4px; color:var(--orange-dark); }
-  .faq-item:has(.faq-a.open) .faq-q { border-left:3px solid var(--orange); padding-left:calc(1.15rem - 3px); color:var(--orange-dark); background:#fff8f3; }
 
+  /* ── KEY FIX: preserve line breaks in answer text ── */
+  .answer-text { white-space: pre-wrap; word-break: break-word; line-height: 1.85; }
+
+  .faq-item:has(.faq-a.open) .faq-q { border-left:3px solid var(--orange); padding-left:calc(1.15rem - 3px); color:var(--orange-dark); background:#fff8f3; }
   .arrow { font-size:10px; color:var(--muted); transition:transform 0.3s; flex-shrink:0; }
   .arrow.open { transform:rotate(180deg); color:var(--orange); }
 
@@ -219,9 +126,8 @@
 
   .modal-overlay { display:none; position:fixed; inset:0; background:rgba(80,20,0,0.5); backdrop-filter:blur(6px); align-items:center; justify-content:center; z-index:100; }
   .modal-overlay.open { display:flex; }
-  .modal { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:1.75rem; width:92%; max-width:500px; animation:popIn 0.2s ease; box-shadow:0 24px 64px rgba(0,0,0,0.2); }
+  .modal { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:1.75rem; width:92%; max-width:540px; animation:popIn 0.2s ease; box-shadow:0 24px 64px rgba(0,0,0,0.2); }
   @keyframes popIn { from{transform:scale(0.95) translateY(10px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
-
   .modal-head { display:flex; align-items:center; gap:12px; margin-bottom:1.25rem; }
   .modal-icon-wrap { width:38px; height:38px; border-radius:10px; background:var(--orange-pale); display:flex; align-items:center; justify-content:center; font-size:18px; }
   .modal h3 { font-size:16px; font-weight:700; }
@@ -229,7 +135,9 @@
   .field label { display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; letter-spacing:0.04em; text-transform:uppercase; }
   .field input,.field textarea,.field select { width:100%; padding:0.65rem 0.85rem; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; border:1px solid var(--border); border-radius:8px; background:#fafafa; color:var(--text); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
   .field input:focus,.field textarea:focus,.field select:focus { border-color:var(--orange); background:#fff; box-shadow:0 0 0 3px rgba(255,107,0,0.1); }
-  .field textarea { height:100px; resize:vertical; }
+  /* ── KEY FIX: taller textarea so multiline answers are easy to write ── */
+  .field textarea { height:160px; resize:vertical; white-space: pre-wrap; }
+  .field-hint { font-size:11px; color:#aaa; margin-top:4px; }
   .modal-actions { display:flex; gap:8px; margin-top:1.25rem; }
   .modal-actions button { flex:1; padding:0.7rem; font-size:13px; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; border-radius:9px; cursor:pointer; transition:all 0.2s; }
   .btn-cancel { background:transparent; border:1px solid var(--border); color:var(--muted); }
@@ -243,12 +151,9 @@
   .footer-dot { width:3px; height:3px; border-radius:50%; background:#ccc; }
 
   @media(max-width:600px) {
-    .hero h1{font-size:24px}
-    .hero h1 .tag{font-size:20px}
-    .version-number{font-size:38px}
-    .company-name{font-size:16px}
-    .logo-icon{width:60px;height:60px}
-    .company-tags{display:none}
+    .hero h1{font-size:24px} .hero h1 .tag{font-size:20px}
+    .version-number{font-size:38px} .company-name{font-size:15px}
+    .logo-icon{width:60px;height:60px} .company-tags{display:none}
   }
 </style>
 </head>
@@ -257,24 +162,19 @@
 <div class="hero">
   <div class="hero-pattern"></div>
   <div class="hero-c1"></div><div class="hero-c2"></div><div class="hero-c3"></div>
-
   <div class="hero-inner">
 
-    <!-- ── LOGO BAR ── -->
     <div class="logo-bar">
       <div class="logo-icon">
-        <img src="logo.png" alt="DRS Logo"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <img src="logo.png" alt="DRS Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
         <svg class="logo-pyramid-svg" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
           <polygon points="30,3 57,52 3,52" fill="#FF6B00"/>
           <polygon points="30,14 50,47 10,47" fill="#CC3300"/>
-          <ellipse cx="30" cy="46" rx="9" ry="5" fill="rgba(0,0,0,0.18)"/>
           <circle cx="30" cy="43" r="7" fill="white"/>
           <circle cx="30" cy="43" r="4.5" fill="#FF6B00"/>
           <circle cx="30" cy="43" r="2" fill="#CC3300"/>
         </svg>
       </div>
-
       <div class="logo-text">
         <div class="company-name">DO IT RIGHT SOLUTIONS</div>
         <div class="company-slogan">"We serve you in a better way...!"</div>
@@ -284,7 +184,6 @@
           <span class="ctag">BATCH PROCESSING</span>
         </div>
       </div>
-
       <div class="version-badge">
         <div class="version-label">VERSION</div>
         <div class="version-number">6</div>
@@ -292,12 +191,10 @@
       </div>
     </div>
 
-    <!-- ── HERO CONTENT ── -->
     <div class="hero-content">
       <div class="hero-live"><span class="live-dot"></span>LIVE · TEAM KNOWLEDGE BASE</div>
       <h1><span class="tag">DRS Ultra</span> Bug Solving FAQ</h1>
       <p class="hero-sub">Quick reference for Database, Configuration, PLC, and Performance issues in DRS Ultra. Anyone on the team can contribute — all questions are saved permanently in the cloud.</p>
-
       <div class="hero-stats">
         <div class="stat"><span class="stat-num" id="total-q">—</span><span class="stat-label">QUESTIONS</span></div>
         <div class="stat"><span class="stat-num">4</span><span class="stat-label">CATEGORIES</span></div>
@@ -306,13 +203,11 @@
       </div>
     </div>
   </div>
-
   <svg class="hero-wave" viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0,24 C480,48 960,0 1440,24 L1440,48 L0,48 Z" fill="#F5F5F5"/>
   </svg>
 </div>
 
-<!-- ── MAIN ── -->
 <div class="main">
   <div class="loading-bar" id="loading-bar"></div>
 
@@ -330,7 +225,6 @@
     </div>
   </div>
 
-  <!-- Database -->
   <div id="section-db" class="section">
     <div class="section-header">
       <div class="sec-icon" style="background:#FFF3E6;">🗄️</div>
@@ -338,10 +232,9 @@
       <span class="sec-count" id="count-db">loading...</span>
     </div>
     <div class="faq-card" id="card-db"><div class="skeleton"></div><div class="skeleton"></div></div>
-    <button class="add-btn" onclick="openModal('db','add')">+ Add a question to Database Function</button>
+    <button class="add-btn" onclick="openModal('db')">+ Add a question to Database Function</button>
   </div>
 
-  <!-- Configuration -->
   <div id="section-cfg" class="section">
     <div class="section-header">
       <div class="sec-icon" style="background:#EFF6FF;">⚙️</div>
@@ -349,10 +242,9 @@
       <span class="sec-count" id="count-cfg">loading...</span>
     </div>
     <div class="faq-card" id="card-cfg"><div class="skeleton"></div><div class="skeleton"></div></div>
-    <button class="add-btn" onclick="openModal('cfg','add')">+ Add a question to Configuration Function</button>
+    <button class="add-btn" onclick="openModal('cfg')">+ Add a question to Configuration Function</button>
   </div>
 
-  <!-- PLC -->
   <div id="section-plc" class="section">
     <div class="section-header">
       <div class="sec-icon" style="background:#F0FDF4;">🔧</div>
@@ -360,10 +252,9 @@
       <span class="sec-count" id="count-plc">loading...</span>
     </div>
     <div class="faq-card" id="card-plc"><div class="skeleton"></div><div class="skeleton"></div></div>
-    <button class="add-btn" onclick="openModal('plc','add')">+ Add a question to PLC Functions</button>
+    <button class="add-btn" onclick="openModal('plc')">+ Add a question to PLC Functions</button>
   </div>
 
-  <!-- Performance -->
   <div id="section-perf" class="section">
     <div class="section-header">
       <div class="sec-icon" style="background:#F5F3FF;">⚡</div>
@@ -371,7 +262,7 @@
       <span class="sec-count" id="count-perf">loading...</span>
     </div>
     <div class="faq-card" id="card-perf"><div class="skeleton"></div><div class="skeleton"></div></div>
-    <button class="add-btn" onclick="openModal('perf','add')">+ Add a question to Performance Enhancement</button>
+    <button class="add-btn" onclick="openModal('perf')">+ Add a question to Performance Enhancement</button>
   </div>
 
   <p class="no-result" id="no-result">No matching questions found.</p>
@@ -406,7 +297,8 @@
     </div>
     <div class="field">
       <label>Answer</label>
-      <textarea id="modal-a" placeholder="Describe the cause and how to fix it..."></textarea>
+      <textarea id="modal-a" placeholder="Type your answer here...&#10;&#10;Press Enter for new lines — they will be preserved exactly as you type."></textarea>
+      <div class="field-hint">💡 Press Enter for new lines — formatting will be preserved.</div>
     </div>
     <div class="field">
       <label>Added by</label>
@@ -438,144 +330,205 @@ const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
 const CATS = ['db','cfg','plc','perf'];
 
+// Store doc data in memory — avoids passing data through onclick attributes
+const docStore = {};
+
 let editMode=false, editDocId=null, editCat=null;
 
-function toast(msg,type='success'){
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.className='toast show '+type;
-  setTimeout(()=>el.className='toast',3000);
+function toast(msg, type='success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + type;
+  setTimeout(() => el.className = 'toast', 3500);
 }
-function loading(on){document.getElementById('loading-bar').classList.toggle('active',on);}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-function renderCard(cat,docs){
-  const card=document.getElementById('card-'+cat);
-  card.innerHTML='';
-  if(!docs.length){
-    card.innerHTML='<div class="empty-cat">No questions yet — be the first to add one!</div>';
+function loading(on) {
+  document.getElementById('loading-bar').classList.toggle('active', on);
+}
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function renderCard(cat, docs) {
+  const card = document.getElementById('card-' + cat);
+  card.innerHTML = '';
+
+  if (!docs.length) {
+    card.innerHTML = '<div class="empty-cat">No questions yet — be the first to add one!</div>';
   } else {
-    docs.forEach(snap=>{
-      const d=snap.data();
-      const item=document.createElement('div');
-      item.className='faq-item';
-      item.innerHTML=`
+    docs.forEach(snap => {
+      const d = snap.data();
+      // Store in memory map so edit can retrieve safely
+      docStore[snap.id] = { cat, question: d.question, answer: d.answer, author: d.author || '' };
+
+      const item = document.createElement('div');
+      item.className = 'faq-item';
+      item.dataset.docid = snap.id;
+
+      // Use textContent via DOM for answer so line breaks are safe
+      item.innerHTML = `
         <button class="faq-q" onclick="toggleQ(this)">
           <span class="faq-q-text">${esc(d.question)}</span>
-          ${d.author?`<span class="q-meta">${esc(d.author)}</span>`:''}
+          ${d.author ? `<span class="q-meta">${esc(d.author)}</span>` : ''}
           <span class="arrow">▼</span>
         </button>
         <div class="faq-a">
-          <p>${esc(d.answer)}</p>
+          <div class="answer-text"></div>
           <div class="faq-actions">
-            <button class="btn-edit" onclick="openEdit('${snap.id}','${cat}','${esc(d.question)}','${esc(d.answer)}','${esc(d.author||'')}')">✏️ Edit</button>
+            <button class="btn-edit"   onclick="openEdit('${snap.id}')">✏️ Edit</button>
             <button class="btn-delete" onclick="delQ('${snap.id}','${cat}')">🗑 Delete</button>
           </div>
         </div>`;
+
+      // Set answer text safely — preserves \n as visual line breaks via white-space:pre-wrap
+      item.querySelector('.answer-text').textContent = d.answer;
       card.appendChild(item);
     });
   }
-  const n=docs.length;
-  document.getElementById('count-'+cat).textContent=n+' question'+(n!==1?'s':'');
+
+  const n = docs.length;
+  document.getElementById('count-' + cat).textContent = n + ' question' + (n !== 1 ? 's' : '');
   updateTotal();
 }
 
-function updateTotal(){
-  let t=0;
-  CATS.forEach(c=>{t+=document.querySelectorAll('#card-'+c+' .faq-item').length;});
-  document.getElementById('total-q').textContent=t;
+function updateTotal() {
+  let t = 0;
+  CATS.forEach(c => { t += document.querySelectorAll('#card-' + c + ' .faq-item').length; });
+  document.getElementById('total-q').textContent = t;
 }
 
-CATS.forEach(cat=>{
-  onSnapshot(query(collection(db,'faq_'+cat),orderBy('createdAt','asc')),snap=>{
-    renderCard(cat,snap.docs);
-  },err=>toast('Error: '+err.message,'error'));
+// Real-time listeners
+CATS.forEach(cat => {
+  onSnapshot(
+    query(collection(db, 'faq_' + cat), orderBy('createdAt', 'asc')),
+    snap => renderCard(cat, snap.docs),
+    err  => toast('Error loading data: ' + err.message, 'error')
+  );
 });
 
-window.toggleQ=function(btn){
-  const a=btn.nextElementSibling,ar=btn.querySelector('.arrow');
-  const open=a.classList.contains('open');
-  btn.closest('.faq-card').querySelectorAll('.faq-a').forEach(x=>x.classList.remove('open'));
-  btn.closest('.faq-card').querySelectorAll('.arrow').forEach(x=>x.classList.remove('open'));
-  if(!open){a.classList.add('open');ar.classList.add('open');}
+// Toggle FAQ open/close
+window.toggleQ = function(btn) {
+  const a  = btn.nextElementSibling;
+  const ar = btn.querySelector('.arrow');
+  const open = a.classList.contains('open');
+  btn.closest('.faq-card').querySelectorAll('.faq-a').forEach(x => x.classList.remove('open'));
+  btn.closest('.faq-card').querySelectorAll('.arrow').forEach(x => x.classList.remove('open'));
+  if (!open) { a.classList.add('open'); ar.classList.add('open'); }
 };
 
-window.openModal=function(cat){
-  editMode=false;editDocId=null;editCat=null;
-  document.getElementById('modal-cat').value=cat;
-  document.getElementById('modal-cat').disabled=false;
-  document.getElementById('modal-q').value='';
-  document.getElementById('modal-a').value='';
-  document.getElementById('modal-author').value='';
-  document.getElementById('modal-title').textContent='Add a new question';
-  document.getElementById('modal-icon').textContent='➕';
-  document.getElementById('btn-save').textContent='Add question';
+// Open modal for ADD
+window.openModal = function(cat) {
+  editMode = false; editDocId = null; editCat = null;
+  document.getElementById('modal-cat').value = cat;
+  document.getElementById('modal-cat').disabled = false;
+  document.getElementById('modal-q').value = '';
+  document.getElementById('modal-a').value = '';
+  document.getElementById('modal-author').value = '';
+  document.getElementById('modal-title').textContent = 'Add a new question';
+  document.getElementById('modal-icon').textContent = '➕';
+  document.getElementById('btn-save').textContent = 'Add question';
   document.getElementById('modal').classList.add('open');
+  setTimeout(() => document.getElementById('modal-q').focus(), 100);
 };
 
-window.openEdit=function(id,cat,q,a,author){
-  editMode=true;editDocId=id;editCat=cat;
-  document.getElementById('modal-cat').value=cat;
-  document.getElementById('modal-cat').disabled=true;
-  document.getElementById('modal-q').value=q;
-  document.getElementById('modal-a').value=a;
-  document.getElementById('modal-author').value=author;
-  document.getElementById('modal-title').textContent='Edit question';
-  document.getElementById('modal-icon').textContent='✏️';
-  document.getElementById('btn-save').textContent='Save changes';
+// Open modal for EDIT — reads from docStore (safe, no inline data passing)
+window.openEdit = function(id) {
+  const d = docStore[id];
+  if (!d) { toast('Could not load question data', 'error'); return; }
+
+  editMode = true; editDocId = id; editCat = d.cat;
+  document.getElementById('modal-cat').value = d.cat;
+  document.getElementById('modal-cat').disabled = true;
+  document.getElementById('modal-q').value = d.question;
+  document.getElementById('modal-a').value = d.answer;   // preserves \n in textarea
+  document.getElementById('modal-author').value = d.author;
+  document.getElementById('modal-title').textContent = 'Edit question';
+  document.getElementById('modal-icon').textContent = '✏️';
+  document.getElementById('btn-save').textContent = 'Save changes';
   document.getElementById('modal').classList.add('open');
+  setTimeout(() => document.getElementById('modal-q').focus(), 100);
 };
 
-window.closeModal=function(){
+window.closeModal = function() {
   document.getElementById('modal').classList.remove('open');
-  document.getElementById('modal-cat').disabled=false;
+  document.getElementById('modal-cat').disabled = false;
 };
-window.overlayClick=function(e){if(e.target===document.getElementById('modal'))closeModal();};
+window.overlayClick = function(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+};
 
-window.saveQuestion=async function(){
-  const cat=editMode?editCat:document.getElementById('modal-cat').value;
-  const q=document.getElementById('modal-q').value.trim();
-  const a=document.getElementById('modal-a').value.trim();
-  const author=document.getElementById('modal-author').value.trim();
-  if(!q||!a){toast('Please fill in question and answer!','error');return;}
-  const btn=document.getElementById('btn-save');
-  btn.disabled=true;btn.textContent=editMode?'Saving...':'Adding...';
+// Save (add or edit)
+window.saveQuestion = async function() {
+  const cat    = editMode ? editCat : document.getElementById('modal-cat').value;
+  const q      = document.getElementById('modal-q').value.trim();
+  const a      = document.getElementById('modal-a').value.trim(); // keeps \n
+  const author = document.getElementById('modal-author').value.trim();
+
+  if (!q || !a) { toast('Please fill in question and answer!', 'error'); return; }
+
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true;
+  btn.textContent = editMode ? 'Saving...' : 'Adding...';
   loading(true);
-  try{
-    if(editMode){
-      await updateDoc(doc(db,'faq_'+cat,editDocId),{question:q,answer:a,author,updatedAt:new Date()});
-      toast('✅ Question updated!');
+
+  try {
+    if (editMode) {
+      await updateDoc(doc(db, 'faq_' + cat, editDocId), {
+        question: q, answer: a, author, updatedAt: new Date()
+      });
+      toast('✅ Question updated successfully!');
     } else {
-      await addDoc(collection(db,'faq_'+cat),{question:q,answer:a,author,createdAt:new Date()});
+      await addDoc(collection(db, 'faq_' + cat), {
+        question: q, answer: a, author, createdAt: new Date()
+      });
       toast('✅ Question saved to cloud!');
     }
     closeModal();
-  }catch(e){toast('❌ Failed: '+e.message,'error');}
-  finally{btn.disabled=false;btn.textContent=editMode?'Save changes':'Add question';loading(false);}
+  } catch(e) {
+    toast('❌ Failed: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = editMode ? 'Save changes' : 'Add question';
+    loading(false);
+  }
 };
 
-window.delQ=async function(id,cat){
-  if(!confirm('Delete this question permanently?'))return;
+// Delete
+window.delQ = async function(id, cat) {
+  if (!confirm('Delete this question permanently from the cloud?')) return;
   loading(true);
-  try{await deleteDoc(doc(db,'faq_'+cat,id));toast('🗑 Question deleted');}
-  catch(e){toast('❌ '+e.message,'error');}
-  finally{loading(false);}
+  try {
+    await deleteDoc(doc(db, 'faq_' + cat, id));
+    toast('🗑 Question deleted');
+  } catch(e) {
+    toast('❌ Delete failed: ' + e.message, 'error');
+  } finally { loading(false); }
 };
 
-window.filterCat=function(cat,btn){
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+// Category filter
+window.filterCat = function(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  CATS.forEach(c=>{document.getElementById('section-'+c).style.display=(cat==='all'||cat===c)?'':'none';});
+  CATS.forEach(c => {
+    document.getElementById('section-' + c).style.display = (cat === 'all' || cat === c) ? '' : 'none';
+  });
 };
 
-window.filterAll=function(val){
-  const q=val.toLowerCase();let any=false;
-  document.querySelectorAll('.faq-item').forEach(item=>{
-    const txt=item.querySelector('.faq-q').textContent.toLowerCase();
-    const match=txt.includes(q);
-    item.style.display=match?'':'none';
-    if(match)any=true;
+// Search
+window.filterAll = function(val) {
+  const q = val.toLowerCase(); let any = false;
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const txt = item.querySelector('.faq-q').textContent.toLowerCase();
+    const match = txt.includes(q);
+    item.style.display = match ? '' : 'none';
+    if (match) any = true;
   });
-  document.getElementById('no-result').style.display=(val&&!any)?'block':'none';
+  document.getElementById('no-result').style.display = (val && !any) ? 'block' : 'none';
 };
 </script>
 </body>
