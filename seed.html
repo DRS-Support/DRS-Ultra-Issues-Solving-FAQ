@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>DRS FAQ — Seed Questions</title>
+<style>
+  body { font-family: sans-serif; max-width: 600px; margin: 60px auto; padding: 20px; background: #f5f5f5; }
+  h2 { color: #FF6B00; margin-bottom: 1rem; }
+  button { background: #FF6B00; color: #fff; border: none; padding: 14px 32px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  #log { background: #1a1a1a; color: #22c55e; padding: 16px; border-radius: 10px; font-family: monospace; font-size: 13px; margin-top: 1.5rem; min-height: 200px; white-space: pre-wrap; }
+  .warn { color: #f59e0b; }
+  .done { color: #22c55e; font-weight: bold; }
+  .err  { color: #ef4444; }
+</style>
+</head>
+<body>
+<h2>🌱 DRS Ultra FAQ — Seed Script</h2>
+<p>Click the button below to load <strong>16 sample questions</strong> into your Firebase Firestore database.<br><br>
+⚠️ Run this <strong>only once</strong>. If you run it again, questions will be duplicated.</p>
+<button id="seed-btn" onclick="runSeed()">🚀 Load Sample Questions into Firebase</button>
+<div id="log">Waiting to start...</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDNMWEWWAi2tU72OVnWWhs-6vUC-BJiHis",
+  authDomain: "drs-ultra-faq.firebaseapp.com",
+  projectId: "drs-ultra-faq",
+  storageBucket: "drs-ultra-faq.firebasestorage.app",
+  messagingSenderId: "707477740",
+  appId: "1:707477740:web:2c95c678b7b8d8985d25c9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+const questions = {
+  db: [
+    { question: "Database connection fails on batch startup", answer: "Check the DB connection string in the config file — verify host, port, username, and password. Ensure the database service is running and the server can reach it on the network. Also confirm the db_timeout value is not too low for your environment.", author: "DRS Team" },
+    { question: "Stored procedure returns unexpected null values", answer: "Null returns usually mean the input parameters passed to the procedure don't match any records. Log the parameters being sent before the call and verify against actual table data. Check if a schema change has altered column names or types.", author: "DRS Team" },
+    { question: "Batch writes failing with a foreign key constraint error", answer: "The batch is trying to insert a record that references a parent row that doesn't exist yet. Ensure parent tables are populated before child tables in the processing order. Review the sequence of inserts in your batch logic.", author: "DRS Team" },
+    { question: "Database deadlock detected during concurrent batch runs", answer: "Deadlocks occur when two processes lock the same rows in opposite order. Add retry logic with exponential backoff. Check if multiple batch instances are writing to the same table — consider serializing those jobs or using row-level locking hints.", author: "DRS Team" },
+  ],
+  cfg: [
+    { question: "Batch not picking up updated config values after restart", answer: "DRS Ultra caches config on load. After editing a config file, ensure you do a full service restart and not just a reload. Also check that the correct config file path is referenced — multiple config files in different folders can cause confusion.", author: "DRS Team" },
+    { question: "Environment-specific settings not applying in production", answer: "Confirm the ENV variable is set to 'production' on the server. DRS Ultra uses environment flags to load the correct config overlay. If the flag is missing, it defaults to the base config which may have dev values.", author: "DRS Team" },
+    { question: "Batch schedule not triggering at the configured time", answer: "Check the cron expression in the scheduler config for syntax errors. Verify the server timezone matches the expected trigger timezone. Also confirm the scheduler service itself is running — it can stop silently after a system reboot.", author: "DRS Team" },
+    { question: "Config file changes get overwritten after deployment", answer: "Deployment pipelines often replace config files with defaults. Move environment-specific config to a location outside the deployment directory, or use a secrets manager. Reference that external path in the application config so it survives deployments.", author: "DRS Team" },
+  ],
+  plc: [
+    { question: "PLC communication drops intermittently during batch run", answer: "Intermittent drops usually point to network instability or PLC scan cycle overload. Check the PLC CPU utilization during the batch window. Reduce polling frequency in the DRS config and add a reconnect handler so the batch resumes instead of failing on a drop.", author: "DRS Team" },
+    { question: "PLC tag values reading as zero even though machine is running", answer: "Zero reads often mean the tag address is wrong or the data block has shifted after a PLC program update. Verify the tag addresses in the DRS tag mapping config against the latest PLC program. A PLC upload after a program change is essential.", author: "DRS Team" },
+    { question: "Batch writes to PLC not reflecting on the machine", answer: "Check if the PLC is in RUN mode and accepting writes. Some PLC models require write-enable to be set explicitly. Also verify that the DRS batch has write permission on that specific data block — read-only configurations are a common oversight.", author: "DRS Team" },
+    { question: "PLC timestamp mismatch causing data sync issues", answer: "Ensure the PLC clock is synced with the server via NTP. Even a few seconds of drift can cause out-of-order records in time-sensitive batch processing. Set a maximum acceptable clock skew in the DRS config and alert when it is exceeded.", author: "DRS Team" },
+  ],
+  perf: [
+    { question: "Batch job takes too long to complete with large datasets", answer: "Break the dataset into smaller chunks using the chunk_size parameter. Enable parallel processing where the data allows. Add database indexes on the columns used in batch queries — missing indexes are the most common cause of slow bulk operations.", author: "DRS Team" },
+    { question: "Memory usage climbs continuously and never drops", answer: "A steady memory climb usually means objects are being accumulated in a cache or collection without being cleared. Review loops that build lists across iterations. Implement a flush or clear step at the end of each chunk to release memory back to the system.", author: "DRS Team" },
+    { question: "CPU spikes to 100% during batch execution", answer: "Identify the processing step causing the spike using task manager or a profiler. Common causes are unoptimized string operations, nested loops, or too many simultaneous threads. Throttle thread count in the DRS config to match the server's core count.", author: "DRS Team" },
+    { question: "Batch runs fine in testing but is slow in production", answer: "Production environments typically handle much larger data volumes and shared server load. Compare the chunk_size, thread count, and DB connection pool settings between environments. Also check if antivirus or monitoring agents are scanning batch output files in real time.", author: "DRS Team" },
+  ]
+};
+
+const log = document.getElementById('log');
+function logMsg(msg, cls='') {
+  log.innerHTML += `<span class="${cls}">${msg}</span>\n`;
+  log.scrollTop = log.scrollHeight;
+}
+
+window.runSeed = async function() {
+  const btn = document.getElementById('seed-btn');
+  btn.disabled = true;
+  log.innerHTML = '';
+  logMsg('🚀 Starting seed process...\n');
+
+  let total = 0;
+  for (const [cat, items] of Object.entries(questions)) {
+    logMsg(`\n📂 Loading category: faq_${cat}`);
+    for (const item of items) {
+      try {
+        await addDoc(collection(db, 'faq_' + cat), { ...item, createdAt: new Date() });
+        logMsg(`  ✅ Added: "${item.question.substring(0,55)}..."`, 'done');
+        total++;
+      } catch(e) {
+        logMsg(`  ❌ Failed: ${e.message}`, 'err');
+      }
+    }
+  }
+
+  logMsg(`\n🎉 Done! ${total}/16 questions loaded into Firebase.`, 'done');
+  logMsg('\n⚠️  You can now close this page and go back to your FAQ site.', 'warn');
+};
+</script>
+</body>
+</html>
