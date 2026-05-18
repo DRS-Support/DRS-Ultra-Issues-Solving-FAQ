@@ -29,7 +29,6 @@
   .hero-c3 { position:absolute; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,0.06); top:60px; left:260px; }
   .hero-inner { position:relative; z-index:2; max-width:1200px; margin:0 auto; padding:0 2rem; }
 
-  /* Full-width dark band — spans the entire hero left to right */
   .logo-bar {
     width:100%;
     background:rgba(0,0,0,0.28);
@@ -68,6 +67,187 @@
   .stat-label { font-size:9px; color:rgba(255,255,255,0.65); margin-top:2px; display:block; font-weight:700; letter-spacing:0.1em; font-family:'IBM Plex Mono',monospace; }
   .hero-wave { display:block; width:100%; height:40px; margin-top:-1px; }
 
+  /* Glow cards section — warm cream backdrop matching the page */
+  .glow-section {
+    background:
+      radial-gradient(ellipse 80% 70% at 15% 20%, rgba(255,140,0,0.10) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 60% at 85% 80%, rgba(255,107,0,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 80% at 50% 50%, rgba(255,180,100,0.06) 0%, transparent 60%),
+      linear-gradient(180deg, #FFF8F0 0%, #FFF3E6 100%);
+    padding:3.25rem 2rem 3.75rem;
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid rgba(255,107,0,0.12);
+  }
+  .glow-section::after {
+    content:'';
+    position:absolute; inset:0;
+    background-image:radial-gradient(circle, rgba(255,107,0,0.08) 1px, transparent 1px);
+    background-size:24px 24px;
+    opacity:0.4;
+    pointer-events:none;
+  }
+  .glow-inner { max-width:1100px; margin:0 auto; position:relative; z-index:1; }
+
+  .glow-header { text-align:center; margin-bottom:2.25rem; }
+  .glow-eyebrow {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Orbitron',sans-serif; font-size:10px; font-weight:900;
+    letter-spacing:0.2em; color:var(--orange-dark); text-transform:uppercase;
+    margin-bottom:12px;
+    background:rgba(255,107,0,0.08);
+    padding:6px 14px; border-radius:20px;
+    border:1px solid rgba(255,107,0,0.18);
+  }
+  .glow-eyebrow::before {
+    content:''; width:6px; height:6px; border-radius:50%;
+    background:var(--orange); box-shadow:0 0 8px var(--orange);
+  }
+  .glow-title {
+    font-family:'Bebas Neue',sans-serif; font-size:42px; letter-spacing:3px;
+    color:#2a1500; line-height:1;
+  }
+  .glow-title span {
+    background:linear-gradient(135deg, #FF6B00, #FF9500);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .glow-subtitle {
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:13px;
+    color:var(--orange-deeper); margin-top:10px;
+    font-weight:500; opacity:0.7;
+  }
+
+  .glow-grid {
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:20px;
+  }
+  .glow-card-wrapper {
+    position:relative;
+    cursor:pointer;
+    opacity:0; transform:translateY(30px);
+    animation:fadeUp 0.7s ease-out forwards;
+  }
+  .glow-card-wrapper:nth-child(1) { animation-delay:0.1s; }
+  .glow-card-wrapper:nth-child(2) { animation-delay:0.2s; }
+  .glow-card-wrapper:nth-child(3) { animation-delay:0.3s; }
+  .glow-card-wrapper:nth-child(4) { animation-delay:0.4s; }
+  @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+  .glow-bg {
+    position:absolute; inset:-4px; border-radius:32px;
+    filter:blur(28px); opacity:0.55;
+    transition:opacity 0.35s ease, transform 0.35s ease;
+    z-index:0; pointer-events:none;
+  }
+  .glow-card-wrapper:hover .glow-bg {
+    opacity:0.85;
+    transform:scale(1.05);
+  }
+
+  .glow-card {
+    position:relative; z-index:1; width:100%; height:240px;
+    border-radius:24px; overflow:hidden;
+    border:3px solid transparent;
+    transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
+    box-shadow:0 4px 20px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .glow-card-wrapper:hover .glow-card {
+    transform:translateY(-6px);
+    box-shadow:0 18px 40px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.05);
+  }
+  .glow-card-inner {
+    width:100%; height:100%; padding:22px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    background:#fff;
+    border-radius:21px;
+    position:relative;
+  }
+
+  .glow-corner-accent {
+    position:absolute; top:0; right:0; width:80px; height:80px;
+    border-radius:0 21px 0 60px;
+    opacity:0.08; pointer-events:none;
+  }
+
+  .glow-icon-ring {
+    width:48px; height:48px; border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    position:relative; z-index:1;
+  }
+  .glow-cat-tag {
+    font-family:'IBM Plex Mono',monospace; font-size:8.5px;
+    font-weight:700; letter-spacing:0.15em; text-transform:uppercase;
+    margin:14px 0 5px;
+  }
+  .glow-card-title {
+    font-size:17px; font-weight:800; color:#1a1a1a;
+    letter-spacing:-0.3px; line-height:1.2; margin-bottom:5px;
+  }
+  .glow-card-desc {
+    font-size:11.5px; line-height:1.55;
+    color:#6b7280; font-weight:400;
+  }
+  .glow-card-foot {
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:10px; margin-top:10px;
+    border-top:1px dashed rgba(0,0,0,0.08);
+  }
+  .glow-count {
+    font-family:'IBM Plex Mono',monospace; font-size:9px;
+    padding:4px 10px; border-radius:7px; font-weight:700; letter-spacing:0.1em;
+  }
+  .glow-arrow {
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700;
+    transition:all 0.25s;
+  }
+  .glow-card-wrapper:hover .glow-arrow {
+    transform:translateX(3px);
+  }
+
+  .gc-db .glow-icon-ring   { background:linear-gradient(135deg, #FFE0CC, #FFB380); color:#7A2800; }
+  .gc-db .glow-cat-tag     { color:#CC4400; }
+  .gc-db .glow-count       { background:#FFF3E6; color:#7A2800; border:1px solid #FFB066; }
+  .gc-db .glow-arrow       { background:#FFF3E6; color:#CC4400; }
+  .gc-db .glow-corner-accent { background:linear-gradient(135deg, #FF6B00, #FFB066); }
+  .gc-db:hover .glow-arrow { background:#CC4400; color:#fff; }
+
+  .gc-cfg .glow-icon-ring  { background:linear-gradient(135deg, #DBEAFE, #93C5FD); color:#1E3A8A; }
+  .gc-cfg .glow-cat-tag    { color:#1E40AF; }
+  .gc-cfg .glow-count      { background:#EFF6FF; color:#1E3A8A; border:1px solid #93C5FD; }
+  .gc-cfg .glow-arrow      { background:#EFF6FF; color:#1E40AF; }
+  .gc-cfg .glow-corner-accent { background:linear-gradient(135deg, #3B82F6, #93C5FD); }
+  .gc-cfg:hover .glow-arrow { background:#1E40AF; color:#fff; }
+
+  .gc-plc .glow-icon-ring  { background:linear-gradient(135deg, #DCFCE7, #86EFAC); color:#14532D; }
+  .gc-plc .glow-cat-tag    { color:#15803D; }
+  .gc-plc .glow-count      { background:#F0FDF4; color:#14532D; border:1px solid #86EFAC; }
+  .gc-plc .glow-arrow      { background:#F0FDF4; color:#15803D; }
+  .gc-plc .glow-corner-accent { background:linear-gradient(135deg, #22C55E, #86EFAC); }
+  .gc-plc:hover .glow-arrow { background:#15803D; color:#fff; }
+
+  .gc-perf .glow-icon-ring { background:linear-gradient(135deg, #EDE9FE, #C4B5FD); color:#3B0764; }
+  .gc-perf .glow-cat-tag   { color:#6D28D9; }
+  .gc-perf .glow-count     { background:#F5F3FF; color:#3B0764; border:1px solid #C4B5FD; }
+  .gc-perf .glow-arrow     { background:#F5F3FF; color:#6D28D9; }
+  .gc-perf .glow-corner-accent { background:linear-gradient(135deg, #8B5CF6, #C4B5FD); }
+  .gc-perf:hover .glow-arrow { background:#6D28D9; color:#fff; }
+
+  @media(max-width:900px) {
+    .glow-grid { grid-template-columns:repeat(2, 1fr); gap:14px; }
+    .glow-title { font-size:34px; }
+  }
+  @media(max-width:520px) {
+    .glow-grid { grid-template-columns:1fr; }
+    .glow-section { padding:2rem 1rem 2.5rem; }
+    .glow-title { font-size:28px; }
+  }
+
   .main { max-width:1200px; margin:0 auto; padding:1.5rem 2rem 3rem; }
 
   .toast { position:fixed; bottom:24px; right:24px; background:#1a1a1a; color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:500; z-index:999; opacity:0; transform:translateY(10px); transition:all 0.3s; pointer-events:none; max-width:300px; }
@@ -98,7 +278,6 @@
   .cat-btn.plc  { background:var(--plc-light);  color:var(--plc-dark);  border-color:var(--plc-border); }
   .cat-btn.perf { background:var(--perf-light); color:var(--perf-dark); border-color:var(--perf-border); }
 
-  /* ── Category sections — strong visual separation ── */
   .section {
     margin-bottom:2rem;
     background:var(--surface);
@@ -108,6 +287,7 @@
     box-shadow:0 2px 12px rgba(0,0,0,0.05);
     position:relative;
     overflow:hidden;
+    scroll-margin-top:20px;
   }
   .section::before {
     content:'';
@@ -160,7 +340,6 @@
   .faq-a.open { max-height:800px; padding:0.9rem 1.15rem; border-top:1px solid var(--border); }
   .faq-a code { font-family:'IBM Plex Mono',monospace; font-size:12px; background:#ffeedd; padding:1px 6px; border-radius:4px; color:var(--orange-dark); }
 
-  /* ── KEY FIX: preserve line breaks in answer text ── */
   .answer-text { white-space: pre-wrap; word-break: break-word; line-height: 1.85; }
 
   .faq-item:has(.faq-a.open) .faq-q { border-left:3px solid var(--orange); padding-left:calc(1.15rem - 3px); color:var(--orange-dark); background:#fff8f3; }
@@ -191,7 +370,6 @@
   .field label { display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; letter-spacing:0.04em; text-transform:uppercase; }
   .field input,.field textarea,.field select { width:100%; padding:0.65rem 0.85rem; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; border:1px solid var(--border); border-radius:8px; background:#fafafa; color:var(--text); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
   .field input:focus,.field textarea:focus,.field select:focus { border-color:var(--orange); background:#fff; box-shadow:0 0 0 3px rgba(255,107,0,0.1); }
-  /* ── KEY FIX: taller textarea so multiline answers are easy to write ── */
   .field textarea { height:160px; resize:vertical; white-space: pre-wrap; }
   .field-hint { font-size:11px; color:#aaa; margin-top:4px; }
   .modal-actions { display:flex; gap:8px; margin-top:1.25rem; }
@@ -231,7 +409,6 @@
   <div class="hero-pattern"></div>
   <div class="hero-c1"></div><div class="hero-c2"></div><div class="hero-c3"></div>
 
-  <!-- Full-width dark band (spans entire screen) -->
   <div class="logo-bar">
     <div class="logo-bar-inner">
       <div class="logo-icon">
@@ -275,8 +452,98 @@
     </div>
   </div>
   <svg class="hero-wave" viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,24 C480,48 960,0 1440,24 L1440,48 L0,48 Z" fill="#F5F5F5"/>
+    <path d="M0,24 C480,48 960,0 1440,24 L1440,48 L0,48 Z" fill="#FFF8F0"/>
   </svg>
+</div>
+
+<!-- Glow cards section -->
+<div class="glow-section">
+  <div class="glow-inner">
+    <div class="glow-header">
+      <div class="glow-eyebrow">Browse by category</div>
+      <div class="glow-title">DRS <span>ULTRA</span> CATEGORIES</div>
+      <div class="glow-subtitle">Tap a card to jump straight to its questions</div>
+    </div>
+    <div class="glow-grid">
+
+      <div class="glow-card-wrapper gc-db" onclick="jumpToCategory('db')">
+        <div class="glow-bg" style="background:linear-gradient(137deg, #FF3D77 0%, #FFB1CE 45%, #FF9D3C 100%);"></div>
+        <div class="glow-card" style="background: linear-gradient(#fff, #fff) padding-box, linear-gradient(137deg, #FF3D77 0%, #FFB1CE 45%, #FF9D3C 100%) border-box;">
+          <div class="glow-card-inner">
+            <div class="glow-corner-accent"></div>
+            <div>
+              <div class="glow-icon-ring">🗄️</div>
+              <div class="glow-cat-tag">SQL · SYNC · RECORDS</div>
+              <div class="glow-card-title">Database Function</div>
+              <div class="glow-card-desc">Batch records, connection timeouts, and data sync errors.</div>
+            </div>
+            <div class="glow-card-foot">
+              <span class="glow-count" id="glow-count-db">— Qs</span>
+              <span class="glow-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glow-card-wrapper gc-cfg" onclick="jumpToCategory('cfg')">
+        <div class="glow-bg" style="background:linear-gradient(137deg, #60A5FA 0%, #93C5FD 45%, #06B6D4 100%);"></div>
+        <div class="glow-card" style="background: linear-gradient(#fff, #fff) padding-box, linear-gradient(137deg, #60A5FA 0%, #93C5FD 45%, #06B6D4 100%) border-box;">
+          <div class="glow-card-inner">
+            <div class="glow-corner-accent"></div>
+            <div>
+              <div class="glow-icon-ring">⚙️</div>
+              <div class="glow-cat-tag">PARAMS · SETTINGS · CFG</div>
+              <div class="glow-card-title">Configuration</div>
+              <div class="glow-card-desc">Parameter mismatches, template conflicts, system settings.</div>
+            </div>
+            <div class="glow-card-foot">
+              <span class="glow-count" id="glow-count-cfg">— Qs</span>
+              <span class="glow-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glow-card-wrapper gc-plc" onclick="jumpToCategory('plc')">
+        <div class="glow-bg" style="background:linear-gradient(137deg, #4ADE80 0%, #86EFAC 45%, #059669 100%);"></div>
+        <div class="glow-card" style="background: linear-gradient(#fff, #fff) padding-box, linear-gradient(137deg, #4ADE80 0%, #86EFAC 45%, #059669 100%) border-box;">
+          <div class="glow-card-inner">
+            <div class="glow-corner-accent"></div>
+            <div>
+              <div class="glow-icon-ring">🔧</div>
+              <div class="glow-cat-tag">LADDER · I/O · COMMS</div>
+              <div class="glow-card-title">PLC Functions</div>
+              <div class="glow-card-desc">Ladder logic faults, comms drops, I/O mapping errors.</div>
+            </div>
+            <div class="glow-card-foot">
+              <span class="glow-count" id="glow-count-plc">— Qs</span>
+              <span class="glow-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glow-card-wrapper gc-perf" onclick="jumpToCategory('perf')">
+        <div class="glow-bg" style="background:linear-gradient(137deg, #8B5CF6 0%, #C4B5FD 45%, #EC4899 100%);"></div>
+        <div class="glow-card" style="background: linear-gradient(#fff, #fff) padding-box, linear-gradient(137deg, #8B5CF6 0%, #C4B5FD 45%, #EC4899 100%) border-box;">
+          <div class="glow-card-inner">
+            <div class="glow-corner-accent"></div>
+            <div>
+              <div class="glow-icon-ring">⚡</div>
+              <div class="glow-cat-tag">SPEED · MEMORY · OEE</div>
+              <div class="glow-card-title">Performance</div>
+              <div class="glow-card-desc">Cycle time bottlenecks, memory leaks, throughput limits.</div>
+            </div>
+            <div class="glow-card-foot">
+              <span class="glow-count" id="glow-count-perf">— Qs</span>
+              <span class="glow-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <div class="main">
@@ -347,7 +614,6 @@
   </footer>
 </div>
 
-<!-- Modal -->
 <div class="modal-overlay" id="modal" onclick="overlayClick(event)">
   <div class="modal">
     <div class="modal-head">
@@ -386,6 +652,18 @@
 
 <div class="toast" id="toast"></div>
 
+<script>
+  window.jumpToCategory = function(cat) {
+    const section = document.getElementById('section-' + cat);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      section.style.transition = 'box-shadow 0.4s ease';
+      section.style.boxShadow = '0 0 0 4px rgba(255,107,0,0.25), 0 2px 12px rgba(0,0,0,0.05)';
+      setTimeout(() => { section.style.boxShadow = ''; }, 1200);
+    }
+  };
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -403,7 +681,6 @@ const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
 const CATS = ['db','cfg','plc','perf'];
 
-// Store doc data in memory — avoids passing data through onclick attributes
 const docStore = {};
 
 let editMode=false, editDocId=null, editCat=null;
@@ -427,8 +704,6 @@ function esc(s) {
     .replace(/"/g,'&quot;');
 }
 
-// Format text: escapes HTML first, then converts **text** → <strong>text</strong>
-// Safe because we escape BEFORE adding the <strong> tag.
 function formatText(s) {
   return esc(s).replace(/\*\*([^\*\n]+?)\*\*/g, '<strong>$1</strong>');
 }
@@ -442,14 +717,12 @@ function renderCard(cat, docs) {
   } else {
     docs.forEach(snap => {
       const d = snap.data();
-      // Store in memory map so edit can retrieve safely
       docStore[snap.id] = { cat, question: d.question, answer: d.answer, author: d.author || '' };
 
       const item = document.createElement('div');
       item.className = 'faq-item';
       item.dataset.docid = snap.id;
 
-      // Use textContent via DOM for answer so line breaks are safe
       item.innerHTML = `
         <button class="faq-q" onclick="toggleQ(this)">
           <span class="faq-q-text">${formatText(d.question)}</span>
@@ -464,7 +737,6 @@ function renderCard(cat, docs) {
           </div>
         </div>`;
 
-      // Render answer with **bold** formatting; line breaks preserved via white-space:pre-wrap
       item.querySelector('.answer-text').innerHTML = formatText(d.answer);
       card.appendChild(item);
     });
@@ -472,9 +744,10 @@ function renderCard(cat, docs) {
 
   const n = docs.length;
   document.getElementById('count-' + cat).textContent = n + ' question' + (n !== 1 ? 's' : '');
+  const glowCount = document.getElementById('glow-count-' + cat);
+  if (glowCount) glowCount.textContent = n + ' Q' + (n !== 1 ? 's' : '');
   updateTotal();
 
-  // Re-apply any active search to newly rendered items
   if (typeof window.filterAll === 'function') {
     const s = document.getElementById('search');
     if (s && s.value.trim()) window.filterAll(s.value);
@@ -487,7 +760,6 @@ function updateTotal() {
   document.getElementById('total-q').textContent = t;
 }
 
-// Real-time listeners
 CATS.forEach(cat => {
   onSnapshot(
     query(collection(db, 'faq_' + cat), orderBy('createdAt', 'asc')),
@@ -496,7 +768,6 @@ CATS.forEach(cat => {
   );
 });
 
-// Toggle FAQ open/close
 window.toggleQ = function(btn) {
   const a  = btn.nextElementSibling;
   const ar = btn.querySelector('.arrow');
@@ -506,7 +777,6 @@ window.toggleQ = function(btn) {
   if (!open) { a.classList.add('open'); ar.classList.add('open'); }
 };
 
-// Open modal for ADD
 window.openModal = function(cat) {
   editMode = false; editDocId = null; editCat = null;
   document.getElementById('modal-cat').value = cat;
@@ -521,7 +791,6 @@ window.openModal = function(cat) {
   setTimeout(() => document.getElementById('modal-q').focus(), 100);
 };
 
-// Open modal for EDIT — reads from docStore (safe, no inline data passing)
 window.openEdit = function(id) {
   const d = docStore[id];
   if (!d) { toast('Could not load question data', 'error'); return; }
@@ -530,7 +799,7 @@ window.openEdit = function(id) {
   document.getElementById('modal-cat').value = d.cat;
   document.getElementById('modal-cat').disabled = true;
   document.getElementById('modal-q').value = d.question;
-  document.getElementById('modal-a').value = d.answer;   // preserves \n in textarea
+  document.getElementById('modal-a').value = d.answer;
   document.getElementById('modal-author').value = d.author;
   document.getElementById('modal-title').textContent = 'Edit question';
   document.getElementById('modal-icon').textContent = '✏️';
@@ -547,11 +816,10 @@ window.overlayClick = function(e) {
   if (e.target === document.getElementById('modal')) closeModal();
 };
 
-// Save (add or edit)
 window.saveQuestion = async function() {
   const cat    = editMode ? editCat : document.getElementById('modal-cat').value;
   const q      = document.getElementById('modal-q').value.trim();
-  const a      = document.getElementById('modal-a').value.trim(); // keeps \n
+  const a      = document.getElementById('modal-a').value.trim();
   const author = document.getElementById('modal-author').value.trim();
 
   if (!q || !a) { toast('Please fill in question and answer!', 'error'); return; }
@@ -583,7 +851,6 @@ window.saveQuestion = async function() {
   }
 };
 
-// Delete
 window.delQ = async function(id, cat) {
   if (!confirm('Delete this question permanently from the cloud?')) return;
   loading(true);
@@ -595,20 +862,16 @@ window.delQ = async function(id, cat) {
   } finally { loading(false); }
 };
 
-// Category filter — works together with the search filter
 window.filterCat = function(cat, btn) {
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   activeCat = cat;
-  // Re-run search so category + search stay in sync
   const s = document.getElementById('search');
   window.filterAll(s ? s.value : '');
 };
 
-// Active category filter — kept in sync with filterCat, used by search
 let activeCat = 'all';
 
-// Search — matches BOTH questions and answers, hides empty sections, opens matches
 window.filterAll = function(val) {
   const q = (val || '').trim().toLowerCase();
   const searching = q.length > 0;
@@ -618,7 +881,6 @@ window.filterAll = function(val) {
     const section = document.getElementById('section-' + cat);
     if (!section) return;
 
-    // If a category filter is active and this isn't it, keep it hidden
     if (activeCat !== 'all' && activeCat !== cat) {
       section.style.display = 'none';
       return;
@@ -639,7 +901,6 @@ window.filterAll = function(val) {
       item.style.display = match ? '' : 'none';
       if (match) sectionMatches++;
 
-      // Auto-open matching item when searching, close when cleared
       const ans   = item.querySelector('.faq-a');
       const arrow = item.querySelector('.arrow');
       if (searching && match) {
@@ -653,31 +914,25 @@ window.filterAll = function(val) {
 
     totalMatches += sectionMatches;
 
-    // Hide the entire section if searching and nothing in it matches
     if (searching && sectionMatches === 0) {
       section.style.display = 'none';
     } else {
       section.style.display = '';
     }
 
-    // Hide "No questions yet" placeholder + the add button while searching
     const empty = section.querySelector('.empty-cat');
     if (empty) empty.style.display = searching ? 'none' : '';
     const addBtn = section.querySelector('.add-btn');
     if (addBtn) addBtn.style.display = searching ? 'none' : '';
   });
 
-  // No-result banner
   const banner = document.getElementById('no-result');
   if (banner) banner.style.display = (searching && totalMatches === 0) ? 'block' : 'none';
 
-  // Show/hide the clear (×) button
   const clr = document.getElementById('search-clear');
   if (clr) clr.classList.toggle('show', searching);
 };
 
-// Wire up search + clear button after DOM is ready (module scripts are deferred,
-// so this avoids a race where typing happens before the handler is attached).
 const searchEl = document.getElementById('search');
 const clearEl  = document.getElementById('search-clear');
 if (searchEl) searchEl.addEventListener('input', e => window.filterAll(e.target.value));
